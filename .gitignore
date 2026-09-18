@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+.venv/
+# Third-party data are not redistributed: put them here yourself (see analysis_data/README.md)
+analysis_data/*/
+data/
+Running_mp4/
+Running_avi/
+# Per-person intermediate files written by run.sh (derived from third-party data)
+analysis/step1_data/outputs/
+analysis/step3_types/outputs/explore_form_data.csv
+analysis/step3_types/outputs/form_features.csv
+analysis/step3_types/outputs/rhythm_features.csv
+analysis/step3_types/outputs/form_assignments.csv
+analysis/step3_types/outputs/rhythm_assignments.csv
+analysis/step3_types/outputs/rhythm_fukuchi_check.csv
+analysis/step4_load/outputs/load_cv_predictions.csv
+analysis/step4_load/outputs/load_dataset.csv
+analysis/step4_load/outputs/load_targets.csv
+analysis/step4_load/outputs/marker_features.csv
+analysis/step4_load/outputs/marker_steps.csv
+analysis/step5_evidence/outputs/loh_cv_predictions.csv
+analysis/step5_evidence/outputs/npj_cv_predictions.csv

@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="ja" data-default-lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stride Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* デザイン：陸上トラック。使い方の4ステップを4本のレーンとして描き、数字は路面に描かれたレーン番号の向きにする。
+   大胆なのはヘッダーのトラックだけで、結果の欄は静かにする。数字は Archivo の幅広・太字（ゼッケンの数字） */
+:root{
+  --ground:#F1F2EE; --surface:#FFFFFF; --surface-2:#F5F6F3; --ink:#14213A; --ink-2:#465267; --ink-3:#687386;
+  --line:#DADDD6; --accent:#2851B8; --accent-soft:#E2E8F6; --lane:#C7D1E6;
+  --track:#2851B8; --track-edge:#1F4399; --on-track:#FFFFFF;
+  --good:#23734B; --good-soft:#DDEFE4; --warn:#9C620A; --warn-soft:#F5EAD4; --crit:#B23A2F; --crit-soft:#F6DFDC;
+  --mock:#14213A; --mock-soft:transparent;
+  --c1:#2851B8; --c2:#C27C0E; --c3:#2A8A57; --c4:#A2479B;
+  --figure:#14213A; --overlay:#2851B8; --body-fill:#DDE2EA;
+  --f-display:"Archivo","Noto Sans JP",system-ui,sans-serif;
+  --f-body:"Archivo","Noto Sans JP",system-ui,-apple-system,"Hiragino Sans",sans-serif;
+  --f-mono:"Archivo","Noto Sans JP",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1220; --surface:#141C2B; --surface-2:#1A2436; --ink:#E6EAF2; --ink-2:#AAB3C2; --ink-3:#8A94A5;
+    --line:#29334A; --accent:#8AABF2; --accent-soft:#1C2A49; --lane:#34425E;
+    --track:#2A4FA8; --track-edge:#1E3C85; --on-track:#FFFFFF;
+    --good:#6CC49A; --good-soft:#17332A; --warn:#E3AE52; --warn-soft:#382D17; --crit:#EE8A7F; --crit-soft:#3D2220;
+    --mock:#E6EAF2; --mock-soft:transparent;
+    --c1:#8AABF2; --c2:#E3AE52; --c3:#6CC49A; --c4:#D79BD2;
+    --figure:#E6EAF2; --overlay:#8AABF2; --body-fill:#26324A;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1220; --surface:#141C2B; --surface-2:#1A2436; --ink:#E6EAF2; --ink-2:#AAB3C2; --ink-3:#8A94A5;
+  --line:#29334A; --accent:#8AABF2; --accent-soft:#1C2A49; --lane:#34425E;
+  --track:#2A4FA8; --track-edge:#1E3C85; --on-track:#FFFFFF;
+  --good:#6CC49A; --good-soft:#17332A; --warn:#E3AE52; --warn-soft:#382D17; --crit:#EE8A7F; --crit-soft:#3D2220;
+  --mock:#E6EAF2; --mock-soft:transparent;
+  --c1:#8AABF2; --c2:#E3AE52; --c3:#6CC49A; --c4:#D79BD2;
+  --figure:#E6EAF2; --overlay:#8AABF2; --body-fill:#26324A;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.65;font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:28px 56px;display:flex;flex-direction:column;gap:20px}
+@media (min-width:700px){.wrap{padding-inline:28px}}
+
+/* ---- ヘッダー：タイトルとトラック ---- */
+header.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,470px);gap:24px 40px;align-items:end;padding-bottom:12px}
+@media (max-width:900px){header.top{grid-template-columns:minmax(0,1fr)}}
+.brand{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.brand h1{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:clamp(40px,7vw,76px);letter-spacing:-.015em;line-height:.9;margin:0}
+.brand p{margin:0;color:var(--ink-2);font-size:15px;max-width:52ch;text-wrap:pretty}
+.mock-badge{font-size:12px;font-weight:600;color:var(--mock);border:1.5px dashed var(--mock);border-radius:3px;padding:3px 10px}
+.top-right{display:flex;flex-direction:column;align-items:flex-end;gap:12px;min-width:0}
+@media (max-width:900px){.top-right{align-items:stretch}.top-right .seg{align-self:flex-start}}
+
+.track{list-style:none;margin:0;padding:0;width:100%;position:relative;background:var(--track);border-block:3px solid var(--on-track);box-shadow:0 0 0 1px var(--track-edge);color:var(--on-track);counter-reset:lane}
+.track::before{content:"";position:absolute;left:52px;top:0;bottom:0;width:4px;background:var(--on-track)}
+.track li{position:relative;display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;min-height:46px}
+.track li + li::after{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--on-track);transform-origin:left;animation:lane .7s cubic-bezier(.2,.7,.2,1) both}
+.track li:nth-child(3)::after{animation-delay:.08s} .track li:nth-child(4)::after{animation-delay:.16s}
+.track b{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:28px;line-height:1;text-align:center;transform:rotate(90deg)}
+.track span{padding:6px 14px 6px 18px;font-size:14px;font-weight:500;line-height:1.35}
+@keyframes lane{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:4px 12px;flex-wrap:wrap;padding:14px 18px 10px}
+.panel-h h2{margin:0;font-family:var(--f-display);font-stretch:112%;font-size:17px;font-weight:700;text-wrap:balance}
+.panel-h .sub{font-size:12px;color:var(--ink-3)}
+.panel-b{padding:8px 18px 18px}
+.note{font-size:11.5px;color:var(--ink-3);letter-spacing:.01em}
+.src{font-size:11.5px;color:var(--ink-3);margin:0;text-wrap:pretty;letter-spacing:.01em}
+
+/* ---- ①②③ の見出し（トラックのレーン番号と区別するため、丸で囲む） ---- */
+.section-label{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;align-items:center;margin:28px 0 -4px}
+.section-label .num{grid-row:span 2;display:grid;place-items:center;width:44px;height:44px;border:2.5px solid var(--accent);border-radius:50%;font-family:var(--f-display);font-stretch:125%;font-size:20px;font-weight:800;color:var(--accent);line-height:1}
+.section-label h2{margin:0;font-family:var(--f-display);font-stretch:118%;font-weight:800;font-size:clamp(22px,3vw,28px);line-height:1.1;letter-spacing:-.01em}
+.section-label p{margin:2px 0 0;font-size:13px;color:var(--ink-2)}
+
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.two{grid-template-columns:minmax(0,1fr)}}
+
+/* ---- 計測 ---- */
+.measure{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:640px){.measure{grid-template-columns:minmax(0,1fr)}.frame{max-width:260px}}
+.frame{position:relative;background:var(--surface-2);border-radius:3px;aspect-ratio:3/4;max-width:100%;overflow:hidden}
+.frame svg{width:100%;height:100%;display:block}
+.frame .tag{position:absolute;left:8px;top:8px;font-size:11px;color:var(--ink-2);background:var(--surface);border-radius:3px;padding:1px 7px}
+.seg{display:inline-flex;flex-wrap:wrap;border:1.5px solid var(--ink);border-radius:3px;overflow:hidden}
+.seg button{font:inherit;font-size:13px;font-weight:500;border:0;background:var(--surface);color:var(--ink);padding:5px 13px;cursor:pointer}
+.seg button + button{border-left:1.5px solid var(--ink)}
+.seg button:hover{background:var(--surface-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font-size:13px;margin:0}
+.meta dt{color:var(--ink-3)} .meta dd{margin:0;font-weight:500}
+.qc{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{font-size:12px;border-radius:3px;padding:1px 8px}
+.chip.ok{color:var(--good);background:var(--good-soft)}
+.chip.wn{color:var(--warn);background:var(--warn-soft)}
+
+/* ---- ① タイプ ---- */
+.tbox{display:flex;flex-direction:column;gap:12px}
+.map{background:var(--surface-2);border-radius:3px;max-width:100%}
+.map svg{width:100%;height:auto;display:block}
+.type-card{display:flex;gap:12px;align-items:stretch;padding:4px 0}
+.type-card .sw{width:5px;border-radius:0;flex:none}
+.type-card .who{font-size:12px;color:var(--ink-3)}
+.type-card b{display:block;font-family:var(--f-display);font-stretch:110%;font-size:17px;font-weight:700;line-height:1.3}
+.type-card p{margin:3px 0 0;font-size:12.5px;color:var(--ink-2)}
+.legs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:480px){.legs{grid-template-columns:minmax(0,1fr)}}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--ink-2)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+
+/* ---- 値と予測 ---- */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{padding-left:0}
+th{font-size:12px;font-weight:500;color:var(--ink-3);border-bottom:1.5px solid var(--ink)}
+td.num{font-weight:500;text-align:right}
+td.name small{display:block;color:var(--ink-3);font-size:11.5px;letter-spacing:.01em}
+.bar{position:relative;height:14px;width:110px;background:var(--surface-2);border-radius:2px}
+.bar .band{position:absolute;top:3px;height:8px;background:var(--lane);border-radius:1px}
+.bar .you{position:absolute;top:0;width:3px;height:14px;background:var(--ink);border-radius:1px}
+.bar .you.r{background:var(--accent)}
+
+.pred{border-top:3px solid var(--ink);padding:14px 0 0;display:flex;flex-direction:column;gap:12px}
+.pred-row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.pred .label{font-size:13px;color:var(--ink-2)}
+.pred .big{font-family:var(--f-display);font-stretch:125%;font-size:52px;font-weight:800;line-height:.95;letter-spacing:-.02em}
+.pred .big small{font-size:22px;margin-left:2px}
+.pred .range{font-size:12.5px;color:var(--ink-2);text-align:right}
+.scale{position:relative;height:30px}
+.scale svg{width:100%;height:30px;display:block}
+.acc{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;border-radius:3px;padding:10px 12px}
+.acc.low{background:var(--warn-soft);color:var(--ink)}
+.acc.weak{background:var(--accent-soft);color:var(--ink)}
+.acc b{white-space:nowrap}
+.leg-preds{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:480px){.leg-preds{grid-template-columns:minmax(0,1fr)}}
+
+/* ---- ② 負担 ---- */
+.load{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:760px){.load{grid-template-columns:minmax(0,1fr)}.bodymap{max-width:160px}}
+.bodymap{max-width:220px;margin:0 auto;width:100%}
+.bodymap svg{width:100%;height:auto;display:block}
+.lrows{display:flex;flex-direction:column}
+.lrow{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) 72px;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:0}
+.lrow .n{font-weight:600}
+.lrow .n small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:400}
+.lrow svg{width:100%;height:26px;display:block}
+.lrow .pct{font-family:var(--f-display);font-stretch:125%;text-align:right;font-size:20px;font-weight:800;line-height:1.1}
+.sim{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 0 16px;margin-bottom:8px;border-bottom:3px solid var(--ink)}
+.sim label{font-family:var(--f-display);font-stretch:112%;font-size:15px;font-weight:700}
+.conf{color:var(--accent);letter-spacing:1px}
+.conf .off{color:var(--line)}
+
+.inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px 12px;margin:16px 0 0}
+.inputs label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink-3)}
+
+.inputs input,.inputs select{font:inherit;font-size:14px;font-weight:500;padding:6px 8px;border:0;border-bottom:1.5px solid var(--ink-3);border-radius:0;background:var(--surface-2);color:var(--ink);width:100%}
+.inputs input:focus-visible,.inputs select:focus-visible,.donate input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.src-switch{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:12px}
+.donate{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;align-items:start;padding-top:18px}
+@media (max-width:860px){.donate{grid-template-columns:minmax(0,1fr)}}
+.share-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+.share-list li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:6px;align-items:start}
+.share-list .yes{color:var(--good);font-weight:700} .share-list .no{color:var(--crit);font-weight:700}
+.consent{display:flex;flex-direction:column;gap:8px;margin-top:16px;font-size:13.5px}
+.consent label{display:flex;gap:8px;align-items:flex-start}
+.consent input{accent-color:var(--track);margin-top:4px}
+.btn{font:inherit;font-family:var(--f-display);font-stretch:112%;font-weight:700;font-size:15px;border:0;border-radius:3px;padding:10px 22px;background:var(--track);color:var(--on-track);cursor:pointer;align-self:flex-start;margin-top:4px}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.timeline{list-style:none;margin:0;padding:0;position:relative}
+.timeline li{position:relative;padding:0 0 16px 24px;font-size:13.5px}
+.timeline li::before{content:"";position:absolute;left:4px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2.5px solid var(--accent);box-sizing:border-box}
+.timeline li:first-child::before{background:var(--accent)}
+.timeline li::after{content:"";position:absolute;left:8px;top:19px;bottom:0;width:2px;background:var(--line)}
+.timeline li:last-child::after{display:none}
+.timeline b{display:block}
+.timeline span{color:var(--ink-2);font-size:12.5px}
+.counter{display:flex;gap:24px;flex-wrap:wrap;margin-top:12px}
+.counter div{min-width:110px}
+.counter b{display:block;font-family:var(--f-display);font-stretch:125%;font-size:40px;font-weight:800;line-height:1}
+.counter span{font-size:12px;color:var(--ink-3)}
+.toast{font-size:13px;color:var(--good);min-height:18px}
+.lrow.na .pct{color:var(--ink-3);font-size:14px}
+.caveat{border-left:4px solid var(--warn);background:var(--warn-soft);padding:14px 18px;border-radius:0 3px 3px 0;font-size:13.5px;margin-top:12px;text-wrap:pretty}
+.caveat b{display:block;margin-bottom:4px;font-family:var(--f-display);font-stretch:112%;font-size:15px}
+.sources{font-size:12px;color:var(--ink-2);display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.sources div{border-top:1.5px solid var(--ink);padding-top:8px}
+.sources b{display:block;color:var(--ink)}
+
+.src-switch .seg button{white-space:nowrap}
+.file-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px}
+.file-row[hidden]{display:none}
+.pose-check{margin:0 0 16px;padding:12px;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+.pose-check[hidden],.vid-opt[hidden]{display:none}
+.pc-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.pc-head h3{margin:0;font-size:15px;font-weight:600}
+.pc-stage{position:relative;max-width:760px;margin:8px 0 4px;background:#000;line-height:0}
+.pc-stage video{display:block;width:100%;height:auto}
+.pc-stage canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+.pc-event{position:absolute;left:8px;top:8px;background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;padding:2px 8px;border-radius:3px;line-height:1.5}
+.pc-event:empty{display:none}
+.pc-strip{display:block;width:100%;max-width:760px;height:40px;margin:0 0 6px}
+.pc-ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;max-width:760px}
+.pc-ctrl input[type=range]{flex:1 1 160px;accent-color:var(--accent)}
+.pc-legend{margin:6px 0 0}
+.sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 4px 0 10px;vertical-align:-1px}
+.sw:first-child{margin-left:0}
+.sw-l{background:var(--c1)}.sw-r{background:var(--c2)}
+.vid-opt{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2)}
+.vid-opt select{font:inherit;font-size:14px;font-weight:500;padding:4px 6px;border:0;border-bottom:1.5px solid var(--ink-3);border-radius:0;background:var(--surface-2);color:var(--ink)}
+.vid-opt select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-sub{font:inherit;font-size:13px;font-weight:500;border:1.5px solid var(--ink);border-radius:3px;background:var(--surface);color:var(--ink);padding:5px 12px;cursor:pointer}
+.btn-sub:hover{background:var(--surface-2)}
+.btn-sub:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-sub[disabled]{opacity:.4;cursor:not-allowed}
+.err{font-size:12.5px;color:var(--crit);min-height:0;margin:0}
+.chip.ng{color:var(--crit);background:var(--crit-soft)}
+.near{display:block;font-size:12.5px;color:var(--warn);font-weight:700;margin-top:3px}
+td .flag{display:inline-block;font-size:10.5px;color:var(--crit);background:var(--crit-soft);border-radius:3px;padding:0 5px;margin-left:6px;font-weight:600}
+.pred .ci{font-size:12.5px;color:var(--ink-2)}
+.pred .na{font-size:12.5px;color:var(--ink-3)}
+.sim-v{display:block;font-family:var(--f-body);font-stretch:100%;font-size:11px;color:var(--good);font-weight:500}
+.sample-note{font-size:11.5px;color:var(--ink-3);margin:6px 0 0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Stride Check</h1>
+      <p data-i18n="brand"></p>
+      <span class="mock-badge" data-i18n="badge"></span>
+    </div>
+    <div class="top-right">
+      <div class="seg" role="group" aria-label="Language / 言語" id="lang">
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+      </div>
+      <ol class="track" data-i18n-aria="steps_aria">
+        <li><b aria-hidden="true">1</b><span data-i18n="step1"></span></li>
+        <li><b aria-hidden="true">2</b><span data-i18n="step2"></span></li>
+        <li><b aria-hidden="true">3</b><span data-i18n="step3"></span></li>
+        <li><b aria-hidden="true">4</b><span data-i18n="step4"></span></li>
+      </ol>
+    </div>
+  </header>
+
+  <!-- 計測 -->
+  <section class="panel" aria-labelledby="h-m">
+    <div class="panel-h">
+      <h2 id="h-m" data-i18n="h_data"></h2>
+      <div class="seg" role="group" data-i18n-aria="view_aria">
+        <button type="button" id="v-rear" aria-pressed="true" data-i18n="rear"></button>
+        <button type="button" id="v-side" aria-pressed="false" data-i18n="side"></button>
+      </div>
+    </div>
+    <div class="panel-b measure">
+      <div class="frame">
+        <span class="tag" id="frame-tag"></span>
+        <svg id="fig" viewBox="0 0 300 400" role="img" data-i18n-aria="fig_aria"></svg>
+      </div>
+      <div>
+        <div class="src-switch">
+          <div class="seg" role="group" data-i18n-aria="src_aria" id="src">
+            <button type="button" data-src="0" aria-pressed="true"></button>
+            <button type="button" data-src="1" aria-pressed="false"></button>
+            <button type="button" data-src="2" aria-pressed="false"></button>
+            <button type="button" data-src="file" aria-pressed="false" data-i18n="my_values"></button>
+          </div>
+        </div>
+        <div class="file-row" id="file-row" hidden>
+          <button type="button" class="btn-sub" id="file-btn" data-i18n="file_btn"></button>
+          <input type="file" id="file" accept=".json,application/json" hidden>
+          <span class="note" data-i18n="file_note"></span>
+          <p class="err" id="file-err" role="alert"></p>
+        </div>
+        <div class="file-row" id="video-row" hidden>
+          <label class="vid-opt" for="vid-view"><span data-i18n="vid_view"></span><select id="vid-view"><option value="rear" data-i18n="vid_view_rear"></option><option value="front" data-i18n="vid_view_front"></option></select></label>
+          <label class="btn-sub" for="vid-rear"><span id="vid-rear-label"></span><input type="file" id="vid-rear" accept="video/*" hidden></label>
+          <label class="btn-sub" for="vid-side"><span data-i18n="vid_side"></span><input type="file" id="vid-side" accept="video/*" hidden></label>
+          <label class="vid-opt" for="vid-fps"><span data-i18n="vid_fps"></span><select id="vid-fps"><option value="" data-i18n="vid_fps_auto"></option><option value="30">30</option><option value="60">60</option><option value="120">120</option><option value="240">240</option></select></label>
+          <button type="button" class="btn-sub" id="vid-run" data-i18n="vid_run"></button>
+          <span class="note" id="vid-files"></span>
+          <p class="note" id="vid-status" aria-live="polite" style="margin:0;width:100%"></p>
+        </div>
+        <section class="pose-check" id="pose-check" hidden>
+          <div class="pc-head">
+            <h3 data-i18n="pc_title"></h3>
+            <div class="seg" role="group" id="pc-view" data-i18n-aria="pc_view_aria">
+              <button type="button" data-v="side" aria-pressed="true" data-i18n="pc_side"></button>
+              <button type="button" data-v="frontal" aria-pressed="false" id="pc-frontal-btn"></button>
+            </div>
+          </div>
+          <p class="note" data-i18n="pc_note"></p>
+          <label class="vid-opt" id="pc-raw-row"><input type="checkbox" id="pc-raw"><span data-i18n="pc_raw"></span></label>
+          <div class="pc-stage"><video id="pc-video" muted playsinline preload="auto"></video><canvas id="pc-canvas"></canvas><span class="pc-event" id="pc-event"></span></div>
+          <canvas class="pc-strip" id="pc-strip" aria-hidden="true"></canvas>
+          <div class="pc-ctrl">
+            <button type="button" class="btn-sub" id="pc-prev" data-i18n="pc_prev"></button>
+            <button type="button" class="btn-sub" id="pc-play"></button>
+            <button type="button" class="btn-sub" id="pc-next" data-i18n="pc_next"></button>
+            <input type="range" id="pc-seek" min="0" max="0" step="1" value="0" data-i18n-aria="pc_seek">
+            <span class="note" id="pc-frame"></span>
+          </div>
+          <p class="note pc-legend"><span class="sw sw-l"></span><span data-i18n="pc_left"></span><span class="sw sw-r"></span><span data-i18n="pc_right"></span><span data-i18n="pc_strip"></span></p>
+        </section>
+        <dl class="meta">
+          <dt data-i18n="meta_data"></dt><dd id="meta-src"></dd>
+          <dt data-i18n="meta_steps"></dt><dd id="meta-steps"></dd>
+        </dl>
+        <p class="sample-note" id="sample-note"></p>
+        <div class="inputs">
+          <label for="in-speed"><span data-i18n="in_speed"></span><input id="in-speed" type="number" step="0.5" min="0"></label>
+          <label for="in-height"><span data-i18n="in_height"></span><input id="in-height" type="number" step="1" min="0"></label>
+          <label for="in-mass"><span data-i18n="in_mass"></span><input id="in-mass" type="number" step="1" min="0"></label>
+          <label for="in-sex"><span data-i18n="in_sex"></span><select id="in-sex"><option value="M" data-i18n="sex_m"></option><option value="F" data-i18n="sex_f"></option><option value="" data-i18n="sex_na"></option></select></label>
+        </div>
+        <div class="qc" data-i18n-aria="qc_aria" id="qc"></div>
+        <p class="note" style="margin:12px 0 0" data-i18n="measure_note"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ① タイプ -->
+  <div class="section-label"><span class="num">1</span><h2 data-i18n="s1_h"></h2><p data-i18n="s1_p"></p></div>
+  <div class="two">
+    <section class="panel" aria-labelledby="h-r">
+      <div class="panel-h"><h2 id="h-r"><span data-i18n="h_rtype"></span></h2><span class="sub" data-i18n="h_rtype_sub"></span></div>
+      <div class="panel-b tbox">
+        <div class="map"><svg id="map-r" viewBox="0 0 340 230" role="img" data-i18n-aria="map_r_aria"></svg></div>
+        <div class="legend" id="leg-r"></div>
+        <div class="type-card" id="card-r"></div>
+        <p class="src" data-i18n="rtype_src"></p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-f">
+      <div class="panel-h"><h2 id="h-f"><span data-i18n="h_ftype"></span></h2><span class="sub" data-i18n="h_ftype_sub"></span></div>
+      <div class="panel-b tbox">
+        <div class="map"><svg id="map-f" viewBox="0 0 340 230" role="img" data-i18n-aria="map_f_aria"></svg></div>
+        <div class="legend" id="leg-f"></div>
+        <div class="legs" id="cards-f"></div>
+        <p class="src" data-i18n="ftype_src"></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- 値と予測 -->
+  <div class="section-label"><span class="num">+</span><h2 data-i18n="s_plus_h"></h2><p data-i18n="s_plus_p"></p></div>
+  <div class="two">
+    <section class="panel" aria-labelledby="h-rv">
+      <div class="panel-h"><h2 id="h-rv"><span data-i18n="h_rv"></span></h2><span class="sub" data-i18n="h_rv_sub"></span></div>
+      <div class="panel-b tbox">
+        <div class="tbl-wrap"><table>
+          <thead><tr><th data-i18n="th_item"></th><th style="text-align:right" data-i18n="th_you"></th><th data-i18n="th_dist"></th></tr></thead>
+          <tbody id="tbl-r"></tbody>
+        </table></div>
+        <p class="src" data-i18n="rv_src"></p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-fv">
+      <div class="panel-h"><h2 id="h-fv"><span data-i18n="h_fv"></span></h2><span class="sub" data-i18n="h_fv_sub"></span></div>
+      <div class="panel-b tbox">
+        <div class="tbl-wrap"><table>
+          <thead><tr><th data-i18n="th_angle"></th><th style="text-align:right" data-i18n="th_left"></th><th style="text-align:right" data-i18n="th_right"></th><th data-i18n="th_dist_lr"></th></tr></thead>
+          <tbody id="tbl-f"></tbody>
+        </table></div>
+        <p class="note" id="f-speed-note" style="margin:0"></p>
+        <div class="pred">
+          <div class="label" data-i18n="pred_label"></div>
+          <div class="leg-preds" id="preds"></div>
+          <div class="scale"><svg id="scale-f" viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+          <div class="range" style="text-align:left" id="pred-range"></div>
+          <div class="acc weak" id="pred-acc"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ② 負担 -->
+  <div class="section-label"><span class="num">2</span><h2 data-i18n="s2_h"></h2><p data-i18n="s2_p"></p></div>
+  <section class="panel" data-i18n-aria="s2_h">
+    <div class="panel-b">
+      <div class="sim">
+        <label for="cad" data-i18n="sim_label"></label>
+        <div class="seg" role="group" data-i18n-aria="sim_label" id="cad">
+          <button type="button" data-c="0" aria-pressed="true" data-i18n="sim_asis"></button>
+          <button type="button" data-c="5" aria-pressed="false">+5%</button>
+          <button type="button" data-c="10" aria-pressed="false">+10%</button>
+        </div>
+        <span class="note" id="cad-note"></span>
+      </div>
+      <div class="load">
+        <div class="bodymap"><svg id="body" viewBox="0 0 200 400" role="img" data-i18n-aria="body_aria"></svg></div>
+        <div>
+          <div class="lrows" id="lrows"></div>
+          <p class="note" style="margin:8px 0 0" data-i18n="load_note"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ データの提供 -->
+  <div class="section-label"><span class="num">3</span><h2 data-i18n="s3_h"></h2><p data-i18n="s3_p"></p></div>
+  <section class="panel" data-i18n-aria="s3_h">
+    <div class="panel-b donate">
+      <div>
+        <ul class="share-list">
+          <li><span class="yes">✓</span><span data-i18n="share1"></span></li>
+          <li><span class="yes">✓</span><span data-i18n="share2"></span></li>
+          <li><span class="no">✕</span><span data-i18n="share3"></span></li>
+          <li><span class="yes">✓</span><span data-i18n="share4"></span></li>
+        </ul>
+        <div class="consent">
+          <label for="c1"><input type="checkbox" id="c1"> <span data-i18n="c1"></span></label>
+          <label for="c2"><input type="checkbox" id="c2"> <span data-i18n="c2"></span></label>
+          <label for="c3"><input type="checkbox" id="c3"> <span data-i18n="c3"></span></label>
+          <button type="button" class="btn" id="donate" disabled data-i18n="donate"></button>
+          <div class="toast" id="toast" aria-live="polite"></div>
+        </div>
+      </div>
+      <div>
+        <ol class="timeline" data-i18n-aria="tl_aria">
+          <li><b data-i18n="tl0_b"></b><span data-i18n="tl0"></span></li>
+          <li><b data-i18n="tl3_b"></b><span data-i18n="tl3"></span></li>
+          <li><b data-i18n="tl6_b"></b><span data-i18n="tl6"></span></li>
+          <li><b data-i18n="tl12_b"></b><span data-i18n="tl12"></span></li>
+        </ol>
+        <div class="counter">
+          <div><b id="cnt">0</b><span data-i18n="cnt1"></span></div>
+          <div><b>142</b><span data-i18n="cnt2"></span></div>
+        </div>
+        <p class="note" style="margin:8px 0 0" data-i18n="donate_note"></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="caveat" role="note">
+    <b data-i18n="caveat_h"></b>
+    <span data-i18n="caveat"></span>
+  </div>
+
+  <section class="sources" data-i18n-aria="sources_aria">
+    <div data-i18n="src_npj"></div>
+    <div data-i18n="src_loh"></div>
+    <div data-i18n="src_fukuchi"></div>
+  </section>
+</div>
+
+<script src="data/app_data.js"></script>
+<script src="model.js"></script>
+<script src="i18n.js"></script>
+<script src="extract/extract.js"></script>
+<script>
+(function(){
+  "use strict";
+  const D = window.APP_DATA, M = window.StrideModel, I18N = window.STRIDE_I18N;
+  const $ = s => document.querySelector(s);
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const isNum = v => typeof v === "number" && isFinite(v);
+  const fmt = (v, d) => isNum(v) ? v.toFixed(d) : "—";
+  const pct0 = v => Math.round(v * 100) + "%";
+  const TYPE_COL = ["--c1", "--c2", "--c3", "--c4"];
+
+  let lang = document.documentElement.dataset.defaultLang === "en" ? "en" : "ja";
+  let source = "0", fileMeasures = null, fileName = "", measures = null, result = null, cadPct = 0, view = "rear";
+
+  /* ---------- 言語 ---------- */
+  function t(key, p){
+    let s = I18N[lang][key];
+    if (s === undefined) s = I18N.ja[key];
+    if (typeof s === "function") return s(p || {});
+    return s;
+  }
+  const legName = s => t(s === "L" ? "leg_L" : "leg_R");
+  function applyStatic(){
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", t(el.dataset.i18nAria)); });
+    document.querySelectorAll("#src button[data-src]:not([data-src=file])").forEach(b => { b.textContent = t("sample_n", {n: +b.dataset.src + 1}); });
+    document.querySelectorAll("#lang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  }
+  document.querySelectorAll("#lang button").forEach(b => b.addEventListener("click", () => {
+    lang = b.dataset.lang;
+    applyStatic(); videoRow(); $("#file-err").textContent = ""; $("#toast").textContent = ""; redraw();
+  }));
+
+  /* ---------- データの選択 ---------- */
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function normalize(m){
+    if (!m || typeof m !== "object" || Array.isArray(m)) throw new Error(t("err_not_object"));
+    if (!m.legs || typeof m.legs !== "object") throw new Error(t("err_no_legs"));
+    const legs = {};
+    ["L", "R"].forEach(s => { if (m.legs[s] && typeof m.legs[s] === "object" && Object.keys(m.legs[s]).length) legs[s] = m.legs[s]; });
+    if (!Object.keys(legs).length) throw new Error(t("err_no_LR"));
+    return {video: m.video || {}, subject: Object.assign({}, m.subject || {}), rhythm: Object.assign({}, m.rhythm || {}), legs, quality: m.quality || {}};
+  }
+  function setSource(s){
+    source = s;
+    document.querySelectorAll("#src button").forEach(b => b.setAttribute("aria-pressed", b.dataset.src === s));
+    $("#file-row").hidden = s !== "file";
+    $("#video-row").hidden = s !== "file" || !window.StrideExtract;
+    if (s === "file") measures = fileMeasures ? clone(fileMeasures) : null;
+    else measures = normalize(clone(D.samples[+s]));
+    fillInputs();
+    update();
+  }
+  document.querySelectorAll("#src button").forEach(b => b.addEventListener("click", () => setSource(b.dataset.src)));
+  $("#file-btn").addEventListener("click", () => $("#file").click());
+  $("#file").addEventListener("change", e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try { fileMeasures = normalize(JSON.parse(reader.result)); fileName = f.name; $("#file-err").textContent = ""; setSource("file"); }
+      catch (err) { $("#file-err").textContent = t("err_load") + err.message; }
+    };
+    reader.onerror = () => { $("#file-err").textContent = t("err_read"); };
+    reader.readAsText(f);
+    e.target.value = "";
+  });
+  /* ---------- 動画から値を出す（公開版の Web サイトだけ。extract/extract.js が StrideExtract を用意する） ---------- */
+  const videos = {rear: null, side: null}, probes = {rear: null, side: null};
+  function videoRow(){
+    const X = window.StrideExtract;
+    if (!X) return;
+    // 動画を選んだ時点でファイルから読んだ fps を見せる（読めなければ fps を選んでもらう）
+    const fpsTag = k => probes[k] === undefined ? "" : probes[k] ? ` (${t("vid_fps_file", {fps: Math.round(probes[k].fps * 100) / 100})})` : ` (${t("vid_fps_unknown")})`;
+    // 前後の動画は後方・前方のどちらから撮ったものでもよい（前方なら extract.js が KA の向きを直す）
+    const frontal = $("#vid-view").value === "front" ? "vid_front" : "vid_rear";
+    $("#vid-rear-label").textContent = t(frontal);
+    const names = ["rear", "side"].filter(k => videos[k]).map(k => `${t(k === "rear" ? frontal : "vid_side")}: ${videos[k].name}${fpsTag(k)}`);
+    $("#vid-files").textContent = names.join(" ／ ");
+    $("#vid-run").disabled = !X.available || !(videos.rear || videos.side);
+    if (!X.available) $("#vid-status").textContent = t("vid_unavailable");
+    pcLabels();
+  }
+  $("#vid-view").addEventListener("change", videoRow);
+  ["rear", "side"].forEach(k => $("#vid-" + k).addEventListener("change", async e => {
+    const f = (e.target.files && e.target.files[0]) || null;
+    videos[k] = f; probes[k] = undefined; $("#vid-status").textContent = ""; pcHide(); videoRow();
+    if (!f || !window.StrideExtract || !window.StrideExtract.probeVideo) return;
+    const info = await window.StrideExtract.probeVideo(f);
+    if (videos[k] === f) { probes[k] = info; videoRow(); }
+  }));
+  $("#vid-run").addEventListener("click", async () => {
+    const X = window.StrideExtract;
+    if (!X || !X.available) return;
+    const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : null; };
+    const subject = {speed_kmh: num("#in-speed"), height_cm: num("#in-height"), mass_kg: num("#in-mass"), sex: $("#in-sex").value || null};
+    $("#vid-run").disabled = true;
+    try {
+      const out = await X.extractMeasures(videos, subject, {fps: num("#vid-fps"), frontalView: $("#vid-view").value, onProgress: (p, msg) => { $("#vid-status").textContent = t("vid_progress", {p: Math.round(p * 100), msg: msg || ""}); }});
+      fileMeasures = normalize(out); fileName = t("vid_result_name"); setSource("file");
+      pcShow(out);
+      const notes = (fileMeasures.quality && fileMeasures.quality.notes) || [];
+      const v = out.video || {}, fpsTxt = x => isNum(x) ? String(Math.round(x * 100) / 100) : "—";
+      const used = t("vid_fps_used", {side: fpsTxt(v.fps_side), rear: v.rear ? fpsTxt(v.fps_rear) : null, front: v.frontal_view === "front", src: t("vid_src_" + (v.fps_source || "none"))});
+      $("#vid-status").textContent = t("vid_done") + " " + used + (notes.length ? " " + notes.join(" / ") : "");
+    } catch (err) {
+      $("#vid-status").textContent = t("vid_error") + err.message;
+    } finally { videoRow(); }
+  });
+
+  /* ---------- 姿勢推定の確認：動画に推定した関節の点を重ねて、目で確かめる ---------- */
+  // MediaPipe Pose の点の番号。奇数 = 左、偶数 = 右
+  const PC_BONES = [[11,12],[23,24],[11,23],[12,24],[11,13],[13,15],[12,14],[14,16],[23,25],[25,27],[27,29],[29,31],[27,31],[24,26],[26,28],[28,30],[30,32],[28,32]];
+  const PC_POINTS = [0,11,12,13,14,15,16,23,24,25,26,27,28,29,30,31,32];
+  const PC = {ov: null, urls: {}, view: "side", playing: false};
+  const pcVideo = () => $("#pc-video");
+  // 側方は、左右の脚を追跡し直した点（frames）と、姿勢推定そのままの点（raw）を切り替えられる
+  const pcClip = () => { if (!PC.ov) return null; const c = PC.view === "frontal" ? PC.ov.frontal : PC.ov.side; return $("#pc-raw").checked && c.raw ? Object.assign({}, c, {frames: c.raw}) : c; };
+  const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  function pcLabels(){
+    const fr = PC.ov && PC.ov.frontal;
+    $("#pc-frontal-btn").hidden = !fr;
+    $("#pc-raw-row").hidden = PC.view !== "side";
+    $("#pc-frontal-btn").textContent = t(fr && fr.view === "front" ? "pc_front" : "pc_rear");
+    $("#pc-play").textContent = t(PC.playing ? "pc_pause" : "pc_play");
+    if (PC.ov) pcDraw();
+  }
+  function pcHide(){
+    const v = pcVideo(); v.pause(); v.removeAttribute("src"); v.load();
+    Object.values(PC.urls).forEach(u => URL.revokeObjectURL(u));
+    PC.urls = {}; PC.ov = null; $("#pose-check").hidden = true;
+  }
+  function pcShow(out){
+    pcHide();
+    if (!out || !out.overlay || !videos.side) return;
+    PC.ov = out.overlay;
+    PC.urls.side = URL.createObjectURL(videos.side);
+    if (PC.ov.frontal && videos.rear) PC.urls.frontal = URL.createObjectURL(videos.rear);
+    $("#pose-check").hidden = false;
+    pcSetView("side");
+  }
+  function pcSetView(v){
+    if (v === "frontal" && !PC.urls.frontal) v = "side";
+    PC.view = v;
+    document.querySelectorAll("#pc-view button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === v));
+    const vid = pcVideo(), c = pcClip();
+    vid.pause(); vid.src = PC.urls[v];
+    $("#pc-seek").max = String(c.frames.length - 1); $("#pc-seek").value = "0";
+    vid.addEventListener("loadeddata", () => pcGo(0), {once: true});
+    pcLabels();
+  }
+  function pcIndex(){ const c = pcClip(); return Math.max(0, Math.min(c.frames.length - 1, Math.floor(pcVideo().currentTime * c.fps + 1e-6))); }
+  function pcGo(i){ const c = pcClip(); if (!c) return; i = Math.max(0, Math.min(c.frames.length - 1, i)); pcVideo().currentTime = (i + .5) / c.fps; }
+  function pcDraw(){
+    const c = pcClip(), vid = pcVideo(), cv = $("#pc-canvas");
+    if (!c || !vid.videoWidth) return;
+    const i = pcIndex(), f = c.frames[i], dpr = window.devicePixelRatio || 1;
+    const W = vid.clientWidth, H = vid.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+    const col = {L: cssVar("--c1"), R: cssVar("--c2"), C: "#FFFFFF"}, side = k => k === 0 ? "C" : k % 2 ? "L" : "R";
+    const P = k => f && f[k] ? {x: f[k][0] * W, y: f[k][1] * H, v: f[k][2]} : null;
+    if (f) {
+      g.lineWidth = 3; g.lineCap = "round";
+      for (const [a, b] of PC_BONES) {
+        const p = P(a), q = P(b); if (!p || !q) continue;
+        g.strokeStyle = side(a) === side(b) ? col[side(a)] : col.C; g.globalAlpha = Math.min(p.v, q.v) < .5 ? .45 : 1;
+        g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(q.x, q.y); g.stroke();
+      }
+      g.globalAlpha = 1;
+      for (const k of PC_POINTS) {
+        const p = P(k); if (!p) continue;
+        g.beginPath(); g.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+        // 見えている確信が低い点は中を抜く
+        if (p.v >= .5) { g.fillStyle = col[side(k)]; g.fill(); }
+        g.lineWidth = 1.5; g.strokeStyle = p.v >= .5 ? "#FFFFFF" : col[side(k)]; g.stroke();
+      }
+    }
+    // 接地・離地のコマ（側方の時刻。前後の動画は同時に始まった前提）
+    const t0 = i / c.fps, t1 = (i + 1) / c.fps, ev = [];
+    for (const s of PC.ov.steps) {
+      if (s.contact >= t0 && s.contact < t1) ev.push(t(s.leg === "L" ? "pc_left" : "pc_right") + " " + t("pc_contact"));
+      if (s.off >= t0 && s.off < t1) ev.push(t(s.leg === "L" ? "pc_left" : "pc_right") + " " + t("pc_off"));
+    }
+    $("#pc-event").textContent = f ? ev.join(" ・ ") : t("pc_nopose");
+    $("#pc-seek").value = String(i);
+    $("#pc-frame").textContent = t("pc_frame", {i: i + 1, n: c.frames.length, s: (i / c.fps).toFixed(2), fps: Math.round(c.fps * 100) / 100});
+    pcStrip(c, i, col);
+  }
+  function pcStrip(c, i, col){
+    const cv = $("#pc-strip"), dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+    const dur = c.frames.length / c.fps, x = s => s / dur * W, row = (H - 6) / 2;
+    g.fillStyle = cssVar("--surface-2"); g.fillRect(0, 0, W, H);
+    for (const s of PC.ov.steps) {
+      g.fillStyle = col[s.leg];
+      g.fillRect(x(s.contact), s.leg === "L" ? 2 : row + 4, Math.max(1, x(s.off) - x(s.contact)), row);
+    }
+    g.fillStyle = cssVar("--ink"); g.fillRect(x((i + .5) / c.fps) - 1, 0, 2, H);
+  }
+  function pcLoop(){
+    if (!PC.playing) return;
+    const c = pcClip(), vid = pcVideo();
+    if (vid.currentTime >= c.frames.length / c.fps) { vid.pause(); return; }
+    pcDraw();
+    if (vid.requestVideoFrameCallback) vid.requestVideoFrameCallback(pcLoop); else requestAnimationFrame(pcLoop);
+  }
+  pcVideo().addEventListener("seeked", pcDraw);
+  pcVideo().addEventListener("play", () => { PC.playing = true; pcLabels(); pcLoop(); });
+  pcVideo().addEventListener("pause", () => { PC.playing = false; pcLabels(); });
+  $("#pc-play").addEventListener("click", () => { const v = pcVideo(); if (v.paused) { if (pcIndex() >= pcClip().frames.length - 1) pcGo(0); v.play(); } else v.pause(); });
+  $("#pc-prev").addEventListener("click", () => { pcVideo().pause(); pcGo(pcIndex() - 1); });
+  $("#pc-next").addEventListener("click", () => { pcVideo().pause(); pcGo(pcIndex() + 1); });
+  $("#pc-seek").addEventListener("input", e => { pcVideo().pause(); pcGo(+e.target.value); });
+  document.querySelectorAll("#pc-view button").forEach(b => b.addEventListener("click", () => pcSetView(b.dataset.v)));
+  window.addEventListener("resize", () => { if (PC.ov) pcDraw(); });
+  $("#pc-raw").addEventListener("change", pcDraw);
+
+  function fillInputs(){
+    const s = measures ? measures.subject : {};
+    $("#in-speed").value = isNum(s.speed_kmh) ? s.speed_kmh : "";
+    $("#in-height").value = isNum(s.height_cm) ? Math.round(s.height_cm) : "";
+    $("#in-mass").value = isNum(s.mass_kg) ? Math.round(s.mass_kg * 10) / 10 : "";
+    $("#in-sex").value = s.sex === "M" || s.sex === "F" ? s.sex : "";
+  }
+  [["#in-speed", "speed_kmh"], ["#in-height", "height_cm"], ["#in-mass", "mass_kg"]].forEach(([id, k]) =>
+    $(id).addEventListener("input", () => { if (!measures) return; const v = parseFloat($(id).value); measures.subject[k] = isFinite(v) ? v : null; update(); }));
+  $("#in-sex").addEventListener("change", () => { if (measures) { measures.subject.sex = $("#in-sex").value || null; } });
+
+  /* ---------- 模式図 ---------- */
+  const views = {
+    rear:{J:{head:[150,62],neck:[150,96],lsh:[118,108],rsh:[182,108],lel:[108,158],rel:[194,154],lwr:[116,196],rwr:[186,196],lhip:[128,212],rhip:[172,204],lkn:[124,290],rkn:[166,286],lan:[134,352],ran:[160,360],ltoe:[120,356],rtoe:[176,368]},
+      B:[["neck","lsh"],["neck","rsh"],["lsh","lel"],["lel","lwr"],["rsh","rel"],["rel","rwr"],["neck","hipc"],["lhip","rhip"],["lhip","lkn"],["lkn","lan"],["rhip","rkn"],["rkn","ran"],["lan","ltoe"],["ran","rtoe"]], rear:true},
+    side:{J:{head:[156,60],neck:[150,94],lsh:[146,106],rsh:[152,106],lel:[126,150],rel:[178,146],lwr:[136,186],rwr:[196,176],lhip:[140,206],rhip:[146,206],lkn:[184,262],rkn:[162,284],lan:[150,300],ran:[150,354],ltoe:[164,296],rtoe:[176,360]},
+      B:[["neck","lsh"],["lsh","lel"],["lel","lwr"],["rsh","rel"],["rel","rwr"],["neck","hipc"],["lhip","lkn"],["lkn","lan"],["lan","ltoe"],["rhip","rkn"],["rkn","ran"],["ran","rtoe"]], rear:false}
+  };
+  function figureLabels(){
+    if (!measures) return [];
+    const side = measures.legs.R ? "R" : "L", leg = measures.legs[side], rh = measures.rhythm, nm = t(side === "R" ? "leg_R_short" : "leg_L_short");
+    if (view === "rear") return [{at:[150,196],t:t("fig_cpd", {v:fmt(leg.CPD,1), leg:nm})},{at:[150,252],t:t("fig_hadd", {v:fmt(leg.HADD,1), leg:nm})}];
+    const strike = rh.foot_strike === "rearfoot" ? t("fig_rear_strike") : rh.foot_strike === "non_rearfoot" ? t("fig_nonrear_strike") : t("fig_strike_na");
+    return [{at:[150,300],t:t("fig_kf", {v:fmt(leg.KF,1), leg:nm})},{at:[12,388],t:t("fig_contact", {v:fmt(rh.contact_s,2), strike})}];
+  }
+  function drawFigure(){
+    const v = views[view], ink = css("--figure"), ov = css("--overlay"), lane = css("--lane"), sub = css("--ink-2"), surf = css("--surface");
+    const J = Object.assign({}, v.J); J.hipc = [(J.lhip[0]+J.rhip[0])/2, (J.lhip[1]+J.rhip[1])/2];
+    let s = "";
+    for (let y = 40; y < 400; y += 40) s += `<line x1="0" y1="${y}" x2="300" y2="${y}" stroke="${lane}" opacity=".5"/>`;
+    s += `<line x1="0" y1="372" x2="300" y2="372" stroke="${sub}" stroke-width="2"/>`;
+    v.B.forEach(([a,b]) => { s += `<line x1="${J[a][0]}" y1="${J[a][1]}" x2="${J[b][0]}" y2="${J[b][1]}" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>`; });
+    s += `<circle cx="${J.head[0]}" cy="${J.head[1]}" r="20" fill="none" stroke="${ink}" stroke-width="5"/>`;
+    Object.entries(J).forEach(([k,p]) => { if (k !== "head" && k !== "hipc") s += `<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${surf}" stroke="${ov}" stroke-width="2.5"/>`; });
+    if (v.rear) s += `<line x1="96" y1="208" x2="204" y2="208" stroke="${ov}" stroke-width="1.5" stroke-dasharray="4 4"/><line x1="${J.lhip[0]}" y1="${J.lhip[1]}" x2="${J.rhip[0]}" y2="${J.rhip[1]}" stroke="${ov}" stroke-width="3"/>`;
+    else s += `<path d="M ${J.rkn[0]-4} ${J.rkn[1]-26} A 26 26 0 0 0 ${J.rkn[0]-10} ${J.rkn[1]+24}" fill="none" stroke="${ov}" stroke-width="3"/>`;
+    const charW = lang === "ja" ? 11 : 6.6;
+    figureLabels().forEach(o => { const w = Math.min(292, o.t.length*charW+14), x = Math.max(4, Math.min(o.at[0]-w/2*(view==="rear"?1:0), 296-w));
+      s += `<rect x="${x}" y="${o.at[1]-15}" width="${w}" height="22" rx="3" fill="${surf}" stroke="${ov}"/><text x="${x+7}" y="${o.at[1]+1}" font-size="12" font-family="Archivo, Noto Sans JP, sans-serif" fill="${ov}">${esc(o.t)}</text>`; });
+    $("#fig").innerHTML = s; $("#frame-tag").textContent = t(view === "rear" ? "tag_rear" : "tag_side");
+  }
+  function setView(n){ view = n; $("#v-rear").setAttribute("aria-pressed", n === "rear"); $("#v-side").setAttribute("aria-pressed", n === "side"); drawFigure(); }
+  $("#v-rear").addEventListener("click", () => setView("rear"));
+  $("#v-side").addEventListener("click", () => setView("side"));
+
+  /* ---------- 分布図 ---------- */
+  function seeded(seed){ let s = seed; return () => { s = (s*16807) % 2147483647; return (s-1)/2147483646; }; }
+  function gauss(r){ return Math.sqrt(-2*Math.log(r()+1e-9)) * Math.cos(2*Math.PI*r()); }
+  function drawMap(el, cfg){
+    const rnd = seeded(cfg.seed), W=340, H=230, pl=42, pb=34, pt=10, pr=10, sub=css("--ink-3"), line=css("--line"), ink=css("--ink"), surf=css("--surface");
+    const clampX = v => Math.max(cfg.x[0], Math.min(cfg.x[1], v)), clampY = v => Math.max(cfg.y[0], Math.min(cfg.y[1], v));
+    const X = v => pl + (v-cfg.x[0])/(cfg.x[1]-cfg.x[0])*(W-pl-pr), Y = v => H-pb-(v-cfg.y[0])/(cfg.y[1]-cfg.y[0])*(H-pb-pt);
+    let s = `<line x1="${pl}" y1="${H-pb}" x2="${W-pr}" y2="${H-pb}" stroke="${line}"/><line x1="${pl}" y1="${pt}" x2="${pl}" y2="${H-pb}" stroke="${line}"/>`;
+    cfg.xt.forEach(v => { s += `<text x="${X(v)}" y="${H-pb+14}" text-anchor="middle" font-size="10" fill="${sub}" font-family="Archivo, sans-serif">${v}</text>`; });
+    cfg.yt.forEach((v,i) => { s += `<text x="${pl-5}" y="${Y(v)+3}" text-anchor="end" font-size="10" fill="${sub}" font-family="${cfg.ytl?"Archivo, Noto Sans JP, sans-serif":"Archivo, sans-serif"}">${cfg.ytl?cfg.ytl[i]:v}</text>`; });
+    s += `<text x="${(W+pl)/2}" y="${H-4}" text-anchor="middle" font-size="10.5" fill="${sub}" font-family="Archivo, Noto Sans JP, sans-serif">${cfg.xl}</text>`;
+    s += `<text x="11" y="${(H-pb+pt)/2}" transform="rotate(-90 11 ${(H-pb+pt)/2})" text-anchor="middle" font-size="10.5" fill="${sub}" font-family="Archivo, Noto Sans JP, sans-serif">${cfg.yl}</text>`;
+    cfg.bands.forEach(b => { if (b.axis === "x") s += `<rect x="${X(b.lo)}" y="${pt}" width="${X(b.hi)-X(b.lo)}" height="${H-pb-pt}" fill="${css("--warn")}" opacity=".12"/>`; else s += `<rect x="${pl}" y="${Y(b.hi)}" width="${W-pl-pr}" height="${Y(b.lo)-Y(b.hi)}" fill="${css("--warn")}" opacity=".12"/>`; });
+    cfg.vlines.forEach(v => { s += `<line x1="${X(v)}" y1="${pt}" x2="${X(v)}" y2="${H-pb}" stroke="${ink}" stroke-width="1.2" stroke-dasharray="5 4"/>`; });
+    cfg.hlines.forEach(v => { s += `<line x1="${pl}" y1="${Y(v)}" x2="${W-pr}" y2="${Y(v)}" stroke="${ink}" stroke-width="1.2" stroke-dasharray="5 4"/>`; });
+    cfg.cellLabels.forEach(c => { s += `<text x="${X(c.x)}" y="${Y(c.y)}" text-anchor="middle" font-size="10" font-weight="700" fill="${css(c.c)}" font-family="Archivo, Noto Sans JP, sans-serif">${c.t}</text>`; });
+    cfg.groups.forEach(g => { const col = css(g.c);
+      for (let i = 0; i < g.n; i++) { const x = g.mx + gauss(rnd)*g.sx, y = g.my + gauss(rnd)*g.sy;
+        if (x < cfg.x[0] || x > cfg.x[1] || y < cfg.y[0] || y > cfg.y[1]) continue;
+        s += `<circle cx="${X(x)}" cy="${Y(y)}" r="2.7" fill="${col}" opacity=".45"/>`; } });
+    cfg.me.forEach(m => { const x = clampX(m.x), y = clampY(m.y);
+      s += `<circle cx="${X(x)}" cy="${Y(y)}" r="7" fill="${surf}" stroke="${m.c?css(m.c):ink}" stroke-width="3"/><text x="${Math.min(X(x)+10, W-pr-30)}" y="${Y(y)+(m.dy||4)}" font-size="11" font-weight="700" fill="${ink}" font-family="Archivo, Noto Sans JP, sans-serif">${m.t}</text>`; });
+    el.innerHTML = s;
+  }
+  function drawMaps(){
+    const tr = D.types.rhythm, tf = D.types.form, rt = result && result.rhythm_type;
+    const sdR = [4.5, 4.5, 6, 5.5], cr = t("cells_r"), cf = t("cells_f");
+    drawMap($("#map-r"), {seed:7, x:[140,195], y:[-0.6,1.6], xt:[150,160,170,180,190], yt:[0,1], ytl:t("ticks_strike"), xl:t("ax_cadence"), yl:t("ax_strike"),
+      vlines:[tr.axes.x.threshold], hlines:[0.5], bands:[{axis:"x", lo:tr.axes.x.threshold_ci95[0], hi:tr.axes.x.threshold_ci95[1]}],
+      cellLabels:[{x:150,y:1.45,t:cr[1],c:"--c2"},{x:182,y:1.45,t:cr[3],c:"--c4"},{x:150,y:-0.45,t:cr[0],c:"--c1"},{x:182,y:-0.45,t:cr[2],c:"--c3"}],
+      groups: tr.types.map((ty,i) => ({c:TYPE_COL[i], n:ty.n_units, mx:ty.mean.cadence_10, my:ty.mean.rearfoot_10, sx:sdR[i], sy:0.14})),
+      me: rt ? [{x:rt.cadence_10, y:rt.label % 2, t:t("you")}] : []});
+    const me = [];
+    if (result) Object.entries(result.legs).forEach(([s, l]) => { if (l.type) me.push({x:l.values_10.CPD, y:l.values_10.KF, t:legName(s), c:TYPE_COL[l.type.label], dy: s === "L" ? -6 : 14}); });
+    drawMap($("#map-f"), {seed:13, x:[-2,13], y:[28,50], xt:[0,4,8,12], yt:[30,35,40,45], xl:t("ax_cpd"), yl:t("ax_kf"),
+      vlines:[tf.axes.x.threshold], hlines:[tf.axes.y.threshold],
+      bands:[{axis:"x", lo:tf.axes.x.threshold_ci95[0], hi:tf.axes.x.threshold_ci95[1]}, {axis:"y", lo:tf.axes.y.threshold_ci95[0], hi:tf.axes.y.threshold_ci95[1]}],
+      cellLabels:[{x:1.5,y:48.5,t:cf[1],c:"--c2"},{x:10,y:48.5,t:cf[3],c:"--c4"},{x:1.5,y:29.5,t:cf[0],c:"--c1"},{x:10,y:29.5,t:cf[2],c:"--c3"}],
+      groups: tf.types.map((ty,i) => ({c:TYPE_COL[i], n:ty.n_units, mx:ty.mean.CPD, my:ty.mean.KF, sx:1.4, sy:i % 2 ? 1.8 : 2.2})),
+      me});
+    const leg = (types, names, extra) => types.map((ty,i) => `<span><i style="background:${css(TYPE_COL[i])}"></i>${esc(names[i])}${lang === "ja" ? "（" : " ("}${pct0(ty.share)}${lang === "ja" ? "）" : ")"}</span>`).join("")
+      + `<span><i style="background:${css("--warn")};opacity:.35;border-radius:2px"></i>${extra}</span>`;
+    $("#leg-r").innerHTML = leg(tr.types, t("types_r"), t("near_band_r"));
+    $("#leg-f").innerHTML = leg(tf.types, t("types_f"), t("near_band_f"));
+  }
+
+  /* ---------- タイプのカード ---------- */
+  function cards(){
+    const rt = result && result.rhythm_type, thrR = D.types.rhythm.axes.x.threshold;
+    if (!rt) $("#card-r").innerHTML = `<span class="sw" style="background:var(--line)"></span><div><span class="who">${t("your_type")}</span><b>${t(measures ? "cannot_judge" : "load_prompt_h")}</b><p>${t(measures ? "rtype_missing" : "load_prompt")}</p></div>`;
+    else {
+      $("#card-r").innerHTML = `<span class="sw" style="background:${css(TYPE_COL[rt.label])}"></span><div><span class="who">${t("your_type")}</span><b>${esc(t("types_r")[rt.label])}</b>
+        <p>${t("rtype_text", {conv: result.speed.delta_kmh !== 0, cad: rt.cadence_10.toFixed(1), thr: thrR.toFixed(1), rear: rt.label % 2 === 1, share: pct0(rt.share)})}${rt.near_boundary.cadence ? `<span class="near">${t("rtype_near")}</span>` : ""}</p></div>`;
+    }
+    const tf = D.types.form;
+    const legsHtml = ["L","R"].filter(s => result && result.legs[s]).map(s => {
+      const l = result.legs[s], ty = l.type;
+      if (!ty) return `<div class="type-card"><span class="sw" style="background:var(--line)"></span><div><span class="who">${legName(s)}</span><b>${t("cannot_judge")}</b><p>${t("ftype_missing")}</p></div></div>`;
+      // KF を中央値で補ったときは、KF の軸は判定していない（区切りちょうどになる）
+      const kfImp = (l.imputed || []).includes("KF");
+      const near = [ty.near_boundary.CPD ? "CPD" : null, ty.near_boundary.KF && !kfImp ? "KF" : null].filter(Boolean);
+      return `<div class="type-card"><span class="sw" style="background:${css(TYPE_COL[ty.label])}"></span><div><span class="who">${legName(s)}</span><b>${esc(t("types_f")[ty.label])}</b>
+        <p>${t("ftype_text", {cpd: l.values_10.CPD.toFixed(1), thx: tf.axes.x.threshold, kf: l.values_10.KF.toFixed(1), thy: tf.axes.y.threshold.toFixed(1)})}${near.length ? `<span class="near">${t("ftype_near", {items: near})}</span>` : ""}${kfImp ? `<span class="near">${t("kf_imputed")}</span>` : ""}</p></div></div>`;
+    }).join("");
+    $("#cards-f").innerHTML = legsHtml || `<p class="note">${t(measures ? "no_legs" : "load_prompt")}</p>`;
+  }
+
+  /* ---------- 値の表 ---------- */
+  function bar(v, mean, sd, lo, hi, v2){
+    const P = x => Math.max(0, Math.min(100, (x-lo)/(hi-lo)*100));
+    return `<div class="bar" aria-hidden="true"><span class="band" style="left:${P(mean-sd)}%;width:${P(mean+sd)-P(mean-sd)}%"></span>${isNum(v)?`<span class="you" style="left:calc(${P(v)}% - 1px)"></span>`:""}${isNum(v2)?`<span class="you r" style="left:calc(${P(v2)}% - 1px)"></span>`:""}</div>`;
+  }
+  function flagged(where, item){ return result && result.flags.some(f => f.where === where && f.item === item) ? `<span class="flag">${t("flag")}</span>` : ""; }
+  function tables(){
+    const rh = measures ? measures.rhythm : {}, dr = D.distributions.rhythm, rt = result && result.rhythm_type, it = t("items");
+    const conv = result && result.speed.delta_kmh !== 0 && rt ? t("conv_cad", {v: rt.cadence_10.toFixed(1)}) : "";
+    const asym = isNum(rh.cadence_asym_pct) ? `${rh.cadence_asym_pct.toFixed(1)} %` : "—";
+    const rows = [
+      {n:it.cadence_spm, k:"cadence_spm", v:fmt(rh.cadence_spm,1), u:t("unit_spm"), bv: rt ? rt.cadence_10 : rh.cadence_spm, lo:140, hi:190, sm:conv},
+      {n:it.duty, k:"duty", v:fmt(rh.duty,3), u:"", bv:rh.duty, lo:0.58, hi:0.84, sm:t("duty_sm")},
+      {n:it.contact_s, k:"contact_s", v:fmt(rh.contact_s,3), u:"s", bv:rh.contact_s, lo:0.20, hi:0.32},
+      {n:it.flight_s, k:"flight_s", v:fmt(rh.flight_s,3), u:"s", bv:rh.flight_s, lo:0.05, hi:0.17},
+      {n:it.pelvis_vertical_osc_mm, k:"pelvis_vertical_osc_mm", v:fmt(rh.pelvis_vertical_osc_mm,0), u:"mm", bv:rh.pelvis_vertical_osc_mm, lo:55, hi:135},
+      {n:t("strike_row"), txt:true, v: rh.foot_strike === "rearfoot" ? t("strike_rear") : rh.foot_strike === "non_rearfoot" ? t("strike_non") : "—",
+        sm:t("strike_sm", {share: pct0(D.types.rhythm.distribution.rearfoot_share), alt: !!rh.alt_strike})},
+      {n:t("asym_row"), txt:true, v:asym, sm: asym === "—" ? t("not_measured") : ""}
+    ];
+    $("#tbl-r").innerHTML = rows.map(x => `<tr><td class="name">${x.n}${x.sm?`<small>${esc(x.sm)}</small>`:""}</td><td class="num">${x.v}${x.u && x.v !== "—" ? " "+x.u : ""}${x.k ? flagged("rhythm", x.k) : ""}</td><td>${x.txt ? "" : bar(x.bv, dr[x.k].mean, dr[x.k].sd, x.lo, x.hi)}</td></tr>`).join("");
+    const df = D.distributions.form, L = result && result.legs.L, R = result && result.legs.R, fsm = t("form_sm");
+    const f = [{k:"CPD", lo:-2, hi:13}, {k:"HADD", lo:68, hi:92}, {k:"KF", lo:28, hi:50}, {k:"KA", lo:-15, hi:17}];
+    const val = (l, k) => l ? l.values_10[k] : null;
+    $("#tbl-f").innerHTML = f.map(x => `<tr><td class="name">${it[x.k]}<small>${fsm[x.k]}</small></td><td class="num">${isNum(val(L,x.k)) ? val(L,x.k).toFixed(1)+"°" : "—"}${flagged("L",x.k)}</td><td class="num">${isNum(val(R,x.k)) ? val(R,x.k).toFixed(1)+"°" : "—"}${flagged("R",x.k)}</td><td>${bar(val(L,x.k), df[x.k].mean, df[x.k].sd, x.lo, x.hi, val(R,x.k))}</td></tr>`).join("");
+    $("#f-speed-note").textContent = result && result.speed.delta_kmh !== 0 ? t("f_speed_note", {s: result.speed.speed_kmh}) : "";
+  }
+
+  /* ---------- ケガの予測 ---------- */
+  function predictions(){
+    const fp = D.form_prediction, perf = fp.performance_cv, spread = perf.prediction_spread_p10_p90;
+    const legs = ["L","R"].filter(s => result && result.legs[s]);
+    $("#preds").innerHTML = legs.map(s => {
+      const p = result.legs[s].prediction;
+      if (!p) return `<div><div class="label">${legName(s)}</div><div class="big">—</div><div class="na">${t("pred_missing")}</div></div>`;
+      const kfImp = (result.legs[s].imputed || []).includes("KF");
+      return `<div><div class="label">${legName(s)}</div><div class="big"${s==="R"?' style="color:var(--accent)"':""}>${Math.round(p.risk*100)}<small>%</small></div><div class="ci">${t("pred_ci", {lo: pct0(p.lo), hi: pct0(p.hi)})}</div>${kfImp ? `<div class="na">${t("kf_imputed")}</div>` : ""}</div>`;
+    }).join("") || `<p class="na">${t(measures ? "no_legs" : "load_prompt")}</p>`;
+    const line = css("--line"), sub = css("--ink-3"), ink = css("--ink"), acc = css("--accent"), lane = css("--lane");
+    const P = v => 4 + Math.max(0, Math.min(1, v)) * 292;
+    let s = `<rect x="4" y="12" width="292" height="6" rx="3" fill="${line}"/><rect x="${P(spread[0])}" y="12" width="${P(spread[1])-P(spread[0])}" height="6" rx="3" fill="${lane}"/>`;
+    s += `<line x1="${P(fp.overall_injury_12m)}" y1="6" x2="${P(fp.overall_injury_12m)}" y2="24" stroke="${sub}" stroke-dasharray="2 2"/>`;
+    legs.forEach(side => { const p = result.legs[side].prediction; if (p) s += `<circle cx="${P(p.risk)}" cy="15" r="6" fill="${side==="R"?acc:ink}"/>`; });
+    [0,.5,1].forEach(v => { s += `<text x="${P(v)}" y="30" font-size="8" text-anchor="${v===0?"start":v===1?"end":"middle"}" fill="${sub}" font-family="Archivo, sans-serif">${v*100}%</text>`; });
+    $("#scale-f").innerHTML = s;
+    $("#pred-range").innerHTML = t("pred_range", {lo: pct0(spread[0]), hi: pct0(spread[1]), all: pct0(fp.overall_injury_12m)});
+    $("#pred-acc").innerHTML = t("pred_acc", {auc: perf.auc.est.toFixed(2), lo: perf.auc.lo.toFixed(2), hi: perf.auc.hi.toFixed(2)});
+  }
+
+  /* ---------- ② 負担 ---------- */
+  const LOAD_ORDER = ["knee", "shin", "hip", "achilles"];
+  const tone = v => v >= 15 ? css("--crit") : v >= 5 ? css("--warn") : css("--good");
+  function drawLoads(){
+    const line = css("--line"), sub = css("--ink-3"), ink = css("--ink"), P = v => Math.max(0, Math.min(200, 100 + v*1.9));
+    const stars = n => `<span class="conf" aria-label="${n}/3">${"★".repeat(n)}<span class="off">${"★".repeat(3-n)}</span></span>`;
+    const names = t("load_names"), vals = {};
+    $("#lrows").innerHTML = LOAD_ORDER.map(key => {
+      const r = D.loads[key], l = result && result.loads[key], nm = names[key];
+      if (!l || !l.estimable) { vals[key] = null;
+        return `<div class="lrow na"><span class="n">${nm[0]}<small>${nm[1]}${t("sep")}${t("confidence")} ${stars(r.stars)}</small></span><span class="note">${t(l ? "load_na" : "load_prompt")}</span><span class="pct">—</span></div>`; }
+      const v = Math.round(l.pct); vals[key] = v;
+      const col = tone(v), e = l.error_pct;
+      const sim = cadPct && l.cadence_sim ? `<span class="sim-v">${t("sim_v", {p: cadPct, v: l.cadence_sim[String(cadPct)].toFixed(1)})}</span>` : "";
+      return `<div class="lrow"><span class="n">${nm[0]}<small>${nm[1]}${t("sep")}${t("confidence")} ${stars(l.stars)}</small></span>
+        <svg viewBox="0 0 200 26" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="13" x2="200" y2="13" stroke="${line}"/><line x1="100" y1="3" x2="100" y2="23" stroke="${sub}" stroke-width="1.5"/>
+        <rect x="${Math.min(P(0),P(l.pct))}" y="8" width="${Math.abs(P(l.pct)-P(0))}" height="10" fill="${col}" opacity=".85" rx="1"/>
+        <line x1="${P(l.pct-e)}" y1="13" x2="${P(l.pct+e)}" y2="13" stroke="${ink}" stroke-width="1.5"/><line x1="${P(l.pct-e)}" y1="9" x2="${P(l.pct-e)}" y2="17" stroke="${ink}" stroke-width="1.5"/><line x1="${P(l.pct+e)}" y1="9" x2="${P(l.pct+e)}" y2="17" stroke="${ink}" stroke-width="1.5"/></svg>
+        <span class="pct" style="color:${col}">${v>0?"+":""}${v}%${sim}</span></div>`;
+    }).join("");
+    const fill = css("--body-fill"), edge = css("--ink-3");
+    const hot = (x,y,r,reg) => { const c = vals[reg] === null || vals[reg] === undefined ? css("--ink-3") : tone(vals[reg]); return `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" opacity=".35"/><circle cx="${x}" cy="${y}" r="${r*0.45}" fill="${c}"/>`; };
+    let s = `<g fill="${fill}" stroke="${edge}" stroke-width="1"><circle cx="100" cy="34" r="22"/><path d="M72 62 Q100 54 128 62 L136 150 Q100 162 64 150 Z"/><path d="M64 150 Q100 162 136 150 L140 180 Q100 192 60 180 Z"/><path d="M62 180 L96 184 L92 280 L70 280 Z"/><path d="M104 184 L138 180 L130 280 L108 280 Z"/><path d="M70 284 L92 284 L90 366 L76 366 Z"/><path d="M108 284 L130 284 L124 366 L110 366 Z"/><path d="M72 368 L92 368 L96 384 L66 384 Z"/><path d="M108 368 L126 368 L134 384 L104 384 Z"/><path d="M72 64 L58 150 L50 148 L62 66 Z"/><path d="M128 64 L142 150 L150 148 L138 66 Z"/></g>`;
+    s += hot(62,176,13,"hip")+hot(138,176,13,"hip")+hot(82,272,12,"knee")+hot(118,272,12,"knee")+hot(80,318,11,"shin")+hot(120,318,11,"shin")+hot(84,358,8,"achilles")+hot(116,358,8,"achilles");
+    $("#body").innerHTML = s;
+    const cad = measures && measures.rhythm.cadence_spm;
+    $("#cad-note").textContent = isNum(cad) ? t("cad_note", {from: Math.round(cad), to: cadPct ? Math.round(cad*(1+cadPct/100)) : null}) : "";
+  }
+  document.querySelectorAll("#cad button").forEach(b => b.addEventListener("click", () => { cadPct = +b.dataset.c; document.querySelectorAll("#cad button").forEach(x => x.setAttribute("aria-pressed", x === b)); drawLoads(); }));
+
+  /* ---------- データの確認 ---------- */
+  function meta(){
+    if (source === "file") {
+      $("#meta-src").textContent = fileMeasures ? fileName : t("not_loaded");
+      $("#sample-note").textContent = "";
+    } else {
+      $("#meta-src").textContent = t("meta_sample", {n: +source + 1});
+      $("#sample-note").textContent = t("sample_note");
+    }
+    $("#meta-steps").textContent = measures ? ["L","R"].filter(s => measures.legs[s]).map(s => t("steps_leg", {leg: legName(s), n: isNum(measures.legs[s].n_steps) ? measures.legs[s].n_steps : null})).join(" ／ ") : "—";
+    const chips = [];
+    if (result) {
+      const sp = result.speed, it = t("items");
+      if (sp.assumed) chips.push(["wn", t("chip_speed_assumed")]);
+      else if (sp.out_of_range) chips.push(["wn", t("chip_speed_out", {s: sp.speed_kmh, lo: D.speed_range_kmh[0], hi: D.speed_range_kmh[1]})]);
+      else chips.push(["ok", t("chip_speed", {s: sp.speed_kmh})]);
+      if (result.flags.length) chips.push(["ng", t("chip_flags") + result.flags.map(f => (f.where === "rhythm" ? "" : legName(f.where) + " ") + (it[f.item] || f.item)).join(lang === "ja" ? "、" : ", ")]);
+      else chips.push(["ok", t("chip_ok")]);
+      const need = ["cadence_spm","duty","contact_s","pelvis_vertical_osc_mm"].filter(k => !isNum(measures.rhythm[k])).length
+        + Object.values(measures.legs).reduce((a, l) => a + ["CPD","HADD","KA","KF","knee_flex_contact","shank_angle_contact","foot_angle_contact","overstride"].filter(k => !isNum(l[k])).length, 0);
+      if (need) chips.push(["wn", t("chip_missing", {n: need})]);
+      if (!isNum(measures.subject.height_cm) || !isNum(measures.subject.mass_kg)) chips.push(["wn", t("chip_body")]);
+      const q = measures.quality || {};
+      if (isNum(q.low_confidence_frames_pct)) chips.push([q.low_confidence_frames_pct > 10 ? "wn" : "ok", t("chip_lowconf", {v: q.low_confidence_frames_pct})]);
+    }
+    $("#qc").innerHTML = chips.map(([c, s]) => `<span class="chip ${c}">${esc(s)}</span>`).join("");
+  }
+
+  ["#c1","#c3"].forEach(s => $(s).addEventListener("change", () => { $("#donate").disabled = !($("#c1").checked && $("#c3").checked); }));
+  $("#donate").addEventListener("click", () => { $("#cnt").textContent = "1"; $("#donate").disabled = true; $("#toast").textContent = t($("#c2").checked ? "toast_follow" : "toast"); });
+
+  function update(){
+    result = measures ? M.evaluate(measures, D) : null;
+    redraw();
+  }
+  function redraw(){
+    meta(); drawFigure(); drawMaps(); cards(); tables(); predictions(); drawLoads();
+  }
+  applyStatic();
+  videoRow();
+  setSource("0");
+  try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw); } catch (e) {}
+  try { new MutationObserver(redraw).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]}); } catch (e) {}
+})();
+</script>

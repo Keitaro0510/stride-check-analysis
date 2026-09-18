@@ -1,0 +1,2992 @@
+[
+ {
+  "name": "sample_1",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.08879729775298,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.26866902013788935,
+      "lo": 0.11391456876463885,
+      "hi": 0.4299486379797337
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.0810546156768703,
+     "pct": 7.355257908071393,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6498947129826884,
+     "pct": -0.45363710780150684,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.391146880431201,
+     "pct": 0.8368890416325553,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "sample_2",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 2
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 169.0,
+    "mass_kg": 64.75,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 176.37999199279352,
+    "contact_s": 0.2452314814814815,
+    "flight_s": 0.09620370370370365,
+    "duty": 0.718142856488938,
+    "foot_strike": "non_rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 76.72088093320467
+   },
+   "legs": {
+    "L": {
+     "CPD": 3.368914882929365,
+     "HADD": 83.659041742132,
+     "KA": 5.391726060246566,
+     "KF": 38.82836821773794,
+     "knee_flex_contact": 6.363570196390387,
+     "shank_angle_contact": -8.73232813369495,
+     "foot_angle_contact": 5.473501124633699,
+     "overstride": 0.11055996965353959,
+     "n_steps": 43
+    },
+    "R": {
+     "CPD": 4.135607152340363,
+     "HADD": 84.80239134584468,
+     "KA": 6.832244987332599,
+     "KF": 32.33630986847228,
+     "knee_flex_contact": 7.010328650191825,
+     "shank_angle_contact": -9.670951231540746,
+     "foot_angle_contact": 4.1266650158095555,
+     "overstride": 0.13462492471509496,
+     "n_steps": 44
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 2,
+    "name": "ハイピッチ×踵以外で接地",
+    "share": 0.2785714285714286,
+    "cadence_10": 176.37999199279352,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 3.368914882929365,
+      "HADD": 83.659041742132,
+      "KF": 38.82836821773794,
+      "KA": 5.391726060246566
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.30097461710495144,
+      "lo": 0.16139158573182266,
+      "hi": 0.42054492269981064
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 4.135607152340363,
+      "HADD": 84.80239134584468,
+      "KF": 32.33630986847228,
+      "KA": 6.832244987332599
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.4291646397799965,
+      "lo": 0.21356638229414798,
+      "hi": 0.6595381683502506
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 2.2703214984284927,
+     "pct": -20.89366129445089,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.5656822762446196,
+     "pct": -5.534592711574062,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.3381968476376236,
+     "pct": -1.3960631141939839,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "sample_3",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 3
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 184.5,
+    "mass_kg": 76.75,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 157.59512479227791,
+    "contact_s": 0.27,
+    "flight_s": 0.11018518518518516,
+    "duty": 0.7079719044875513,
+    "foot_strike": "non_rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 107.1977410939231
+   },
+   "legs": {
+    "L": {
+     "CPD": 2.027293876780688,
+     "HADD": 89.24605544618511,
+     "KA": 14.189243202045088,
+     "KF": 42.27531626663689,
+     "knee_flex_contact": 16.935993418112787,
+     "shank_angle_contact": -3.865836480253752,
+     "foot_angle_contact": 2.228080940229914,
+     "overstride": 0.13492310131547075,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 6.489353398228072,
+     "HADD": 80.70906015474627,
+     "KA": 7.296302738060829,
+     "KF": 36.69919390594449,
+     "knee_flex_contact": 16.28177465770302,
+     "shank_angle_contact": -4.212879363020527,
+     "foot_angle_contact": 4.450957955404302,
+     "overstride": 0.14366887092379974,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 0,
+    "name": "ローピッチ×踵以外で接地",
+    "share": 0.2571428571428571,
+    "cadence_10": 157.59512479227791,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 2.027293876780688,
+      "HADD": 89.24605544618511,
+      "KF": 42.27531626663689,
+      "KA": 14.189243202045088
+     },
+     "imputed": [],
+     "type": {
+      "label": 1,
+      "name": "骨盤が安定×膝の曲がりが深い",
+      "share": 0.2777777777777778,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.17920038146335193,
+      "lo": 0.05856604333918984,
+      "hi": 0.3397032069328904
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 6.489353398228072,
+      "HADD": 80.70906015474627,
+      "KF": 36.69919390594449,
+      "KA": 7.296302738060829
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.3489811579501515,
+      "lo": 0.2167852855779104,
+      "hi": 0.5028110323198487
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.2357497960530215,
+     "pct": 12.74540610665141,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6796438680831267,
+     "pct": 1.3412775410313615,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.3611553166910393,
+     "pct": -0.4278831100917039,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "cadence_at_threshold",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 162.56743846432047,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 162.56743846432047,
+    "near_boundary": {
+     "cadence": true
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.08879729775298,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.26866902013788935,
+      "lo": 0.11391456876463885,
+      "hi": 0.4299486379797337
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.055690888149661,
+     "pct": 6.471492493353032,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.63834104472481,
+     "pct": -1.150727439738898,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.383350433938565,
+     "pct": 0.5081056380153102,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "speed_12kmh",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 12.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 12.0,
+    "assumed": false,
+    "delta_kmh": 2.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 151.30062289823059,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 0.9167933448710366,
+      "HADD": 84.85865590983892,
+      "KF": 38.96810987803943,
+      "KA": 5.26588738266224
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.3104329905907989,
+      "lo": 0.1505181397505248,
+      "hi": 0.4564064478416743
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.314725569755348,
+      "HADD": 81.7958146630868,
+      "KF": 36.227766443639126,
+      "KA": 2.0052583712637064
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.34368151885015624,
+      "lo": 0.21878478501096313,
+      "hi": 0.5054911174682762
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.0788030339652797,
+     "pct": 7.276804532360684,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6715969473324641,
+     "pct": 0.8557667463685349,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.426591903497118,
+     "pct": 2.3316386478681523,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "speed_out_of_range",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 14.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 14.0,
+    "assumed": false,
+    "delta_kmh": 4.0,
+    "out_of_range": true
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 146.08695790248143,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 0.6037079728212636,
+      "HADD": 84.08500819716373,
+      "KF": 37.84742245832587,
+      "KA": 1.683619542295654
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.35553296440570953,
+      "lo": 0.189053278663223,
+      "hi": 0.5245226313776428
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.0016401977055756,
+      "HADD": 81.02216695041162,
+      "KF": 35.10707902392557,
+      "KA": -1.5770094691028795
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.39087382030070517,
+      "lo": 0.257275200843459,
+      "hi": 0.5658092592531169
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.076551452253689,
+     "pct": 7.198351156649974,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.69329918168224,
+     "pct": 2.16517060053859,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.4620369265630364,
+     "pct": 3.8263882541037875,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "subject_missing",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": null,
+    "height_cm": null,
+    "mass_kg": null,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": true,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.08879729775298,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.26866902013788935,
+      "lo": 0.11391456876463885,
+      "hi": 0.4299486379797337
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 2.98125222877223,
+     "pct": 3.877776226483292,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.653555877004523,
+     "pct": -0.23274085335716668,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.416695338335005,
+     "pct": 1.9142912856829755,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "leg_missing_KA",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": null,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.08879729775298,
+      "KA": null
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": null
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.056130592930932,
+     "pct": 6.486813422737585,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6599827624230934,
+     "pct": 0.15502514353303082,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.39258726302317,
+     "pct": 0.897631315891223,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "kf_not_measured",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": null,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": null,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.54,
+      "KA": 8.848155223028826
+     },
+     "imputed": [
+      "KF"
+     ],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.2595445487067694,
+      "lo": 0.10944033288664257,
+      "hi": 0.41646201276546685
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 40.54,
+      "KA": 5.587526211630292
+     },
+     "imputed": [
+      "KF"
+     ],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.23463417013544535,
+      "lo": 0.14274104371851112,
+      "hi": 0.3439813208920087
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.079576144856201,
+     "pct": 7.303742555031269,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6506440949419345,
+     "pct": -0.4084231630127985,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.39115982261284,
+     "pct": 0.8374348254756963,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "load_inputs_missing",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": null
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": null,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.08879729775298,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.26866902013788935,
+      "lo": 0.11391456876463885,
+      "hi": 0.4299486379797337
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 2.9823475216497046,
+     "pct": 3.91594025277087,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.591389539783046,
+     "pct": -3.983545505334289,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.3310791086926006,
+     "pct": -1.6962247889536537,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "out_of_range_values",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 230.0,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 70.0,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 3,
+    "name": "ハイピッチ×踵で接地",
+    "share": 0.22142857142857142,
+    "cadence_10": 230.0,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 70.0,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 1,
+      "name": "骨盤が安定×膝の曲がりが深い",
+      "share": 0.2777777777777778,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.016081366726616083,
+      "lo": 0.0008191972315047477,
+      "hi": 0.15653793190584558
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 2.9280569681477315,
+     "pct": 2.0242579880292415,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.4311091244776035,
+     "pct": -13.654061000025298,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.295141289781717,
+     "pct": -3.2117560545451513,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": [
+    {
+     "where": "rhythm",
+     "item": "cadence_spm",
+     "value": 230.0
+    },
+    {
+     "where": "L",
+     "item": "KF",
+     "value": 70.0
+    }
+   ]
+  }
+ },
+ {
+  "name": "non_rearfoot",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "non_rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 0,
+    "name": "ローピッチ×踵以外で接地",
+    "share": 0.2571428571428571,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.08879729775298,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.26866902013788935,
+      "lo": 0.11391456876463885,
+      "hi": 0.4299486379797337
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.0810546156768703,
+     "pct": 7.355257908071393,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6498947129826884,
+     "pct": -0.45363710780150684,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.391146880431201,
+     "pct": 0.8368890416325553,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "form_grid_0",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 3.5,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 37.54,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 3.5,
+      "HADD": 85.63230362251412,
+      "KF": 37.54,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.2981590865479721,
+      "lo": 0.14185343274185264,
+      "hi": 0.4531836252052268
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.0717027654407483,
+     "pct": 7.029405101403122,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6685768878951954,
+     "pct": 0.6735515235832784,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.3832154952124487,
+     "pct": 0.5024151463670629,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "form_grid_1",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 3.5,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 43.54,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 3.5,
+      "HADD": 85.63230362251412,
+      "KF": 43.54,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 1,
+      "name": "骨盤が安定×膝の曲がりが深い",
+      "share": 0.2777777777777778,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.18536296461290253,
+      "lo": 0.0861666740250665,
+      "hi": 0.3152242238768948
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.102778737449297,
+     "pct": 8.112206091929815,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6528256316217023,
+     "pct": -0.2768001932087377,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.382943463550585,
+     "pct": 0.49094331804583213,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "form_grid_2",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 7.5,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 37.54,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 7.5,
+      "HADD": 85.63230362251412,
+      "KF": 37.54,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.2559027749493381,
+      "lo": 0.13805311513603657,
+      "hi": 0.421403901944098
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.078485149634887,
+     "pct": 7.265728274867351,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6897053596308145,
+     "pct": 1.948337422466004,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.3690366155091045,
+     "pct": -0.09552140495133359,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "form_grid_3",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 7.5,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 43.54,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 7.5,
+      "HADD": 85.63230362251412,
+      "KF": 43.54,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 3,
+      "name": "骨盤が落ちる×膝の曲がりが深い",
+      "share": 0.2222222222222222,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.15554960190473013,
+      "lo": 0.07448847564014112,
+      "hi": 0.24950761866694324
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.109561121643435,
+     "pct": 8.34852926539403,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.673954103357321,
+     "pct": 0.9979857056739743,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.3687645838472404,
+     "pct": -0.1069932332725831,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "form_grid_4",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 5.5,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.54,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 5.5,
+      "HADD": 85.63230362251412,
+      "KF": 40.54,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": true,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.218590290294344,
+      "lo": 0.11314242631910494,
+      "hi": 0.32156145671802566
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.0906319435420917,
+     "pct": 7.688967183398574,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.6712654956262583,
+     "pct": 0.8357686146286262,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.3759900395298446,
+     "pct": 0.1977109565472399,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "left_leg_only",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": 156.5142878939797,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": {
+    "label": 1,
+    "name": "ローピッチ×踵で接地",
+    "share": 0.24285714285714285,
+    "cadence_10": 156.5142878939797,
+    "near_boundary": {
+     "cadence": false
+    }
+   },
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.08879729775298,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.26866902013788935,
+      "lo": 0.11391456876463885,
+      "hi": 0.4299486379797337
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.114807202100301,
+     "pct": 8.531321974613688,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.5725947713547925,
+     "pct": -5.117527464129368,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.4079598529201545,
+     "pct": 1.5459077368884941,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ },
+ {
+  "name": "rhythm_missing_cadence",
+  "input": {
+   "video": {
+    "rear": null,
+    "side": null,
+    "note": "サンプル：研究データのランナー（Fukuchi ほか 2017、CC BY 4.0）。マーカーを2Dに投影して計算した値を、時速10kmに内挿",
+    "sample_id": 1
+   },
+   "subject": {
+    "speed_kmh": 10.0,
+    "height_cm": 181.0,
+    "mass_kg": 74.0,
+    "sex": "M"
+   },
+   "rhythm": {
+    "cadence_spm": null,
+    "contact_s": 0.26740740740740737,
+    "flight_s": 0.1155555555555555,
+    "duty": 0.6980138733530887,
+    "foot_strike": "rearfoot",
+    "alt_strike": false,
+    "cadence_asym_pct": null,
+    "duty_asym_pct": null,
+    "pelvis_vertical_osc_mm": 106.50316493157605
+   },
+   "legs": {
+    "L": {
+     "CPD": 1.2298787169208096,
+     "HADD": 85.63230362251412,
+     "KA": 8.848155223028826,
+     "KF": 40.08879729775298,
+     "knee_flex_contact": 5.483164474759635,
+     "shank_angle_contact": -8.975597398647455,
+     "foot_angle_contact": 19.64182304746013,
+     "overstride": 0.17076441224609512,
+     "n_steps": 38
+    },
+    "R": {
+     "CPD": 7.627810941805121,
+     "HADD": 82.569462375762,
+     "KA": 5.587526211630292,
+     "KF": 37.34845386335268,
+     "knee_flex_contact": 2.9649998289943813,
+     "shank_angle_contact": -11.26161385857379,
+     "foot_angle_contact": 21.77822174633499,
+     "overstride": 0.18481428089708965,
+     "n_steps": 38
+    }
+   },
+   "quality": {
+    "step_sd": null,
+    "low_confidence_frames_pct": null,
+    "notes": []
+   }
+  },
+  "expected": {
+   "speed": {
+    "speed_kmh": 10.0,
+    "assumed": false,
+    "delta_kmh": 0.0,
+    "out_of_range": false
+   },
+   "rhythm_type": null,
+   "legs": {
+    "L": {
+     "values_10": {
+      "CPD": 1.2298787169208096,
+      "HADD": 85.63230362251412,
+      "KF": 40.08879729775298,
+      "KA": 8.848155223028826
+     },
+     "imputed": [],
+     "type": {
+      "label": 0,
+      "name": "骨盤が安定×膝の曲がりが浅い",
+      "share": 0.21604938271604937,
+      "near_boundary": {
+       "CPD": false,
+       "KF": true
+      }
+     },
+     "prediction": {
+      "risk": 0.26866902013788935,
+      "lo": 0.11391456876463885,
+      "hi": 0.4299486379797337
+     }
+    },
+    "R": {
+     "values_10": {
+      "CPD": 7.627810941805121,
+      "HADD": 82.569462375762,
+      "KF": 37.34845386335268,
+      "KA": 5.587526211630292
+     },
+     "imputed": [],
+     "type": {
+      "label": 2,
+      "name": "骨盤が落ちる×膝の曲がりが浅い",
+      "share": 0.2839506172839506,
+      "near_boundary": {
+       "CPD": false,
+       "KF": false
+      }
+     },
+     "prediction": {
+      "risk": 0.29938652942709154,
+      "lo": 0.19117194274286958,
+      "hi": 0.44786521507847094
+     }
+    }
+   },
+   "loads": {
+    "knee": {
+     "estimable": true,
+     "value": 3.031987682805864,
+     "pct": 5.645585769731936,
+     "error_pct": 14.590404404116203,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -4.374872777219461,
+      "10": -8.749745554438938
+     }
+    },
+    "achilles": {
+     "estimable": false,
+     "stars": 1
+    },
+    "hip": {
+     "estimable": true,
+     "value": 1.627543776425156,
+     "pct": -1.8021803960664606,
+     "error_pct": 19.288870730326373,
+     "stars": 2,
+     "cadence_sim": {
+      "5": -3.18757212171913,
+      "10": -6.37514424343826
+     }
+    },
+    "shin": {
+     "estimable": true,
+     "value": 2.376064408177224,
+     "pct": 0.20084715161135178,
+     "error_pct": 6.677728616486543,
+     "stars": 3,
+     "cadence_sim": null
+    }
+   },
+   "flags": []
+  }
+ }
+]

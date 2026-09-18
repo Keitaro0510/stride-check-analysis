@@ -1,0 +1,197 @@
+== マーカーから計算した動画相当の値 ==
+歩: 7913、人×速度×脚: 201、人: 39（全39名）
+処理できなかった人: []
+人×速度ごとの歩数: 中央値 81
+左右の割り当てが交互になっている割合（連続する歩）: 中央値 1.00、最小 0.40
+
+除外（人×速度×脚）: 16番 4.5 m/s L（歩数）, 16番 4.5 m/s R（歩数）, 18番 4.5 m/s R（歩数）, 21番 2.5 m/s L（歩数）, 21番 2.5 m/s R（歩数）, 21番 3.5 m/s L（歩数外れ値）, 21番 3.5 m/s R（歩数外れ値）, 21番 4.5 m/s L（外れ値）, 21番 4.5 m/s R（外れ値）, 24番 4.5 m/s R（歩数）, 26番 3.5 m/s L（歩数）, 26番 4.5 m/s L（歩数外れ値）, 26番 4.5 m/s R（外れ値）, 35番 3.5 m/s L（外れ値骨盤マーカー欠け）, 35番 3.5 m/s R（骨盤マーカー欠け）, 37番 3.5 m/s L（歩数）, 37番 3.5 m/s R（歩数）
+残り: 184 件（36 名）
+
+値の分布（除外後、人×速度×脚の中央値、速度別の平均 ± SD）:
+speed_ms                     2.5     3.5     4.5
+CPD                 mean    4.06    4.80    5.03
+                    std     2.63    2.52    2.76
+HADD                mean   83.43   81.86   81.13
+                    std     2.80    3.03    3.14
+KA                  mean    4.43    4.00    4.65
+                    std     3.85    3.90    3.97
+KF                  mean   37.41   38.84   39.87
+                    std     4.79    3.82    3.63
+knee_flex_contact   mean    9.29    9.67   11.15
+                    std     4.29    4.97    4.98
+shank_angle_contact mean   -6.95   -9.97  -11.47
+                    std     2.08    2.86    2.97
+foot_angle_contact  mean   13.89   16.67   17.11
+                    std     6.73    7.33    7.64
+overstride          mean    0.14    0.20    0.23
+                    std     0.03    0.04    0.05
+pelvis_vertical_osc mean   95.46   91.37   79.29
+                    std    14.32   13.38   14.69
+contact_s           mean    0.27    0.23    0.20
+                    std     0.02    0.02    0.03
+flight_s            mean    0.10    0.12    0.13
+                    std     0.02    0.02    0.02
+step_s              mean    0.37    0.35    0.33
+                    std     0.02    0.02    0.03
+cadence_spm         mean  160.88  169.94  181.14
+                    std     8.98   10.11   15.36
+duty                mean    0.72    0.65    0.61
+                    std     0.06    0.05    0.07
+== 負担の指標 ==
+人×速度×脚: 202、人: 39
+除外: 36番 3.5 m/s L, 37番 3.5 m/s L, 38番 3.5 m/s L, 39番 3.5 m/s L
+速度別の平均 ± SD（除外後）:
+speed_ms                  2.5    3.5    4.5
+knee_ext_moment   mean   2.78   3.08   3.28
+                  std    0.43   0.51   0.57
+ankle_pf_moment   mean   2.15   2.34   2.42
+                  std    0.27   0.29   0.36
+hip_abd_moment    mean   1.61   1.79   1.83
+                  std    0.27   0.32   0.40
+vgrf_peak_bw      mean   2.31   2.51   2.61
+                  std    0.14   0.16   0.26
+loading_rate_bw_s mean  38.97  64.00  91.20
+                  std   13.96  16.41  25.40
+impact_peak_share mean   0.11   0.32   0.52
+                  std    0.22   0.38   0.43
+stance_pct        mean  36.26  32.92  31.08
+                  std    2.33   1.91   2.01
+
+衝撃のピークを検出した歩の割合（中央値）× 記録の接地の仕方:
+                   count  mean   std  min   25%   50%   75%   max
+recorded_rearfoot                                                
+False               75.0  0.15  0.26  0.0  0.00  0.00  0.11  0.87
+True               122.0  0.42  0.42  0.0  0.01  0.28  0.92  1.00
+
+指標どうしの相関（3.5 m/s）:
+                   knee_ext_moment  ankle_pf_moment  hip_abd_moment  vgrf_peak_bw  loading_rate_bw_s
+knee_ext_moment               1.00             0.05            0.16          0.27              -0.05
+ankle_pf_moment               0.05             1.00            0.22          0.47              -0.05
+hip_abd_moment                0.16             0.22            1.00          0.40              -0.07
+vgrf_peak_bw                  0.27             0.47            0.40          1.00               0.09
+loading_rate_bw_s            -0.05            -0.05           -0.07          0.09               1.00
+データ: 181 件（36 名）
+           target feature_set method     r2  rel_rmse  spearman  r2_extra  r2_extra_lo  r2_extra_hi
+  knee_ext_moment          L0  ridge  0.143     0.164     0.480     0.000        0.000        0.000
+  knee_ext_moment          L0    gbm -0.051     0.182     0.330    -0.226       -0.540        0.021
+  knee_ext_moment          L1  ridge  0.196     0.159     0.513     0.062       -0.076        0.172
+  knee_ext_moment          L1    gbm  0.015     0.176     0.415    -0.149       -0.427        0.045
+  knee_ext_moment          L2  ridge  0.307     0.148     0.627     0.192       -0.027        0.393
+  knee_ext_moment          L2    gbm  0.279     0.151     0.560     0.159       -0.070        0.314
+  knee_ext_moment          L3  ridge  0.396     0.138     0.683     0.295        0.109        0.464
+  knee_ext_moment          L3    gbm  0.310     0.147     0.592     0.195       -0.035        0.352
+  knee_ext_moment        Lang  ridge  0.174     0.161     0.510     0.036       -0.183        0.167
+  knee_ext_moment        Lang    gbm  0.126     0.166     0.459    -0.019       -0.264        0.138
+  ankle_pf_moment          L0  ridge -0.021     0.141     0.146     0.000        0.000        0.000
+  ankle_pf_moment          L0    gbm -0.222     0.155     0.102    -0.197       -0.599        0.013
+  ankle_pf_moment          L1  ridge -0.048     0.143     0.224    -0.027       -0.251        0.113
+  ankle_pf_moment          L1    gbm -0.322     0.161     0.060    -0.295       -0.689       -0.027
+  ankle_pf_moment          L2  ridge  0.143     0.129     0.518     0.161       -0.052        0.394
+  ankle_pf_moment          L2    gbm -0.058     0.144     0.253    -0.036       -0.344        0.153
+  ankle_pf_moment          L3  ridge -0.090     0.146     0.387    -0.067       -0.360        0.289
+  ankle_pf_moment          L3    gbm -0.069     0.145     0.207    -0.047       -0.301        0.147
+  ankle_pf_moment        Lang  ridge  0.012     0.139     0.254     0.032       -0.076        0.108
+  ankle_pf_moment        Lang    gbm -0.032     0.142     0.250    -0.011       -0.375        0.181
+   hip_abd_moment          L0  ridge -0.040     0.201     0.018     0.000        0.000        0.000
+   hip_abd_moment          L0    gbm -0.130     0.209     0.118    -0.086       -0.340        0.123
+   hip_abd_moment          L1  ridge  0.019     0.195     0.247     0.057       -0.105        0.208
+   hip_abd_moment          L1    gbm  0.002     0.197     0.270     0.041       -0.170        0.211
+   hip_abd_moment          L2  ridge  0.134     0.183     0.438     0.168       -0.003        0.363
+   hip_abd_moment          L2    gbm  0.037     0.193     0.326     0.075       -0.111        0.263
+   hip_abd_moment          L3  ridge  0.120     0.185     0.401     0.154       -0.031        0.354
+   hip_abd_moment          L3    gbm  0.018     0.195     0.331     0.056       -0.142        0.264
+   hip_abd_moment        Lang  ridge  0.053     0.192     0.292     0.090       -0.019        0.205
+   hip_abd_moment        Lang    gbm -0.060     0.203     0.263    -0.018       -0.225        0.195
+     vgrf_peak_bw          L0  ridge  0.207     0.081     0.544     0.000        0.000        0.000
+     vgrf_peak_bw          L0    gbm  0.152     0.083     0.526    -0.069       -0.389        0.151
+     vgrf_peak_bw          L1  ridge  0.512     0.063     0.782     0.385        0.030        0.683
+     vgrf_peak_bw          L1    gbm  0.405     0.070     0.774     0.250       -0.340        0.700
+     vgrf_peak_bw          L2  ridge  0.356     0.073     0.705     0.188       -0.089        0.579
+     vgrf_peak_bw          L2    gbm  0.108     0.086     0.515    -0.124       -0.317        0.135
+     vgrf_peak_bw          L3  ridge  0.499     0.064     0.770     0.368        0.111        0.702
+     vgrf_peak_bw          L3    gbm  0.475     0.066     0.782     0.338       -0.031        0.686
+     vgrf_peak_bw        Lang  ridge  0.151     0.084     0.481    -0.070       -0.221        0.018
+     vgrf_peak_bw        Lang    gbm  0.174     0.082     0.524    -0.041       -0.265        0.102
+loading_rate_bw_s          L0  ridge  0.510     0.309     0.686     0.000        0.000        0.000
+loading_rate_bw_s          L0    gbm  0.369     0.350     0.617    -0.287       -0.480       -0.143
+loading_rate_bw_s          L1  ridge  0.566     0.291     0.748     0.114       -0.048        0.266
+loading_rate_bw_s          L1    gbm  0.432     0.332     0.672    -0.160       -0.560        0.145
+loading_rate_bw_s          L2  ridge  0.509     0.309     0.717    -0.003       -0.263        0.196
+loading_rate_bw_s          L2    gbm  0.539     0.299     0.721     0.060       -0.325        0.315
+loading_rate_bw_s          L3  ridge  0.655     0.259     0.821     0.296        0.131        0.424
+loading_rate_bw_s          L3    gbm  0.620     0.272     0.766     0.225       -0.087        0.448
+loading_rate_bw_s        Lang  ridge  0.506     0.310     0.708    -0.008       -0.088        0.073
+loading_rate_bw_s        Lang    gbm  0.431     0.333     0.661    -0.161       -0.338       -0.029
+           target  noise_level  r2_extra_mean  r2_extra_sd
+  knee_ext_moment          0.0          0.295        0.000
+  knee_ext_moment          1.0          0.204        0.038
+  knee_ext_moment          2.0         -0.064        0.084
+  ankle_pf_moment          0.0         -0.067        0.000
+  ankle_pf_moment          1.0         -0.138        0.054
+  ankle_pf_moment          2.0         -0.304        0.113
+   hip_abd_moment          0.0          0.154        0.000
+   hip_abd_moment          1.0          0.024        0.032
+   hip_abd_moment          2.0         -0.336        0.076
+     vgrf_peak_bw          0.0          0.368        0.000
+     vgrf_peak_bw          1.0          0.276        0.047
+     vgrf_peak_bw          2.0          0.031        0.099
+loading_rate_bw_s          0.0          0.296        0.000
+loading_rate_bw_s          1.0          0.168        0.029
+loading_rate_bw_s          2.0         -0.193        0.078
+           target   mean     sd    p10    p90  n_legs  n_subjects
+  knee_ext_moment  2.870  0.444  2.296  3.425      59          30
+  ankle_pf_moment  2.209  0.266  1.912  2.558      59          30
+   hip_abd_moment  1.657  0.286  1.294  2.034      59          30
+     vgrf_peak_bw  2.371  0.136  2.200  2.555      59          30
+loading_rate_bw_s 45.743 13.076 32.420 63.388      59          30
+            feature    mean     sd  loh2025_mean  loh2025_sd
+            mass_kg  69.717  7.739           NaN         NaN
+          height_cm 175.883  6.730           NaN         NaN
+        cadence_spm 163.466  9.244           NaN         NaN
+               duty   0.701  0.054           NaN         NaN
+          contact_s   0.258  0.024           NaN         NaN
+                CPD   4.249  2.611         5.438       2.582
+               HADD  82.999  2.794        79.541       4.090
+                 KA   4.365  3.878         1.613       6.329
+                 KF  37.745  4.458        40.757       3.410
+  knee_flex_contact   9.497  4.339           NaN         NaN
+shank_angle_contact  -7.648  2.146           NaN         NaN
+ foot_angle_contact  14.356  6.466           NaN         NaN
+         overstride   0.153  0.031           NaN         NaN
+pelvis_vertical_osc  94.350 13.844           NaN         NaN
+duty                   0.0015
+contact_s             -0.0010
+overstride             0.0000
+knee_flex_contact     -0.0182
+shank_angle_contact   -0.0029
+foot_angle_contact     0.0015
+KF                    -0.2144
+pelvis_vertical_osc   -1.1543
+CPD                   -0.0236
+HADD                   0.0475
+KA                    -0.0472
+           target  cadence_change_pct  load_change_pct     lo    hi expected_direction  show_on_screen
+  knee_ext_moment                   5            -4.37  -7.47 -0.93                下がる            True
+  ankle_pf_moment                   5            -1.87  -5.55  0.30              一定しない           False
+   hip_abd_moment                   5            -3.19  -7.61 -0.33                下がる            True
+     vgrf_peak_bw                   5            -2.02  -4.04 -0.18              一定しない           False
+loading_rate_bw_s                   5             6.09  -2.64 13.60              一定しない           False
+  knee_ext_moment                  10            -8.75 -14.95 -1.85                下がる            True
+  ankle_pf_moment                  10            -3.74 -11.10  0.61              一定しない           False
+   hip_abd_moment                  10            -6.38 -15.22 -0.65                下がる            True
+     vgrf_peak_bw                  10            -4.04  -8.09 -0.35              一定しない           False
+loading_rate_bw_s                  10            12.19  -5.28 27.21              一定しない           False
+# ステップ4 結果：部位ごとの負担の推定（Fukuchi 2017）
+
+## 結論
+
+- **膝のお皿の裏**（膝の伸展モーメントのピーク）：R²_extra 0.30［0.11〜0.46］、R² 0.40、誤差 15%、信頼度 ★★☆、ピッチ+10%で -8.7%（画面に出す）
+- **アキレス腱**（足首の底屈モーメントのピーク）：R²_extra -0.07［-0.36〜0.29］、R² -0.09、誤差 15%、信頼度 ★☆☆、**走り方による違いは推定できない**、ピッチのシミュレーションは画面に出さない
+- **股関節の外側**（股関節の外転モーメントのピーク）：R²_extra 0.15［-0.03〜0.35］、R² 0.12、誤差 19%、信頼度 ★★☆、ピッチ+10%で -6.4%（画面に出す）
+- **すね**（鉛直床反力のピーク）：R²_extra 0.37［0.11〜0.70］、R² 0.50、誤差 7%、信頼度 ★★★、ピッチのシミュレーションは画面に出さない
+
+R²_extra = 1 − 誤差²(モデル) ÷ 誤差²(速度・体重・身長だけのモデル)。0なら「走り方を見ても、速度と体格から分かる以上のことは分からない」
+
+real	7m54.757s
+user	26m59.374s
+sys	0m33.523s
